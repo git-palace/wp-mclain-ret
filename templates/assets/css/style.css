@@ -1,0 +1,25 @@
+.simple-search-form {
+	max-width: 600px;
+	margin: auto;
+}
+
+input[type="text"].ssf-input,
+.ssf-btn {
+	height: 50px;
+  padding: 8px 25px;
+  border-radius: 8px;
+}
+
+.ssf-btn {
+	cursor: pointer;
+	padding-left: 50px;
+	padding-right: 50px;
+	color: #fff;
+	background-color: #192a83;
+	border-color: #192a83;
+}
+
+.ssf-btn:hover {
+	color: #fff;
+	background-color: #101f6d;
+}
