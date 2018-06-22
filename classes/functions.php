@@ -27,3 +27,10 @@ function update_mclain_config() {
 	}
 	return false;
 }
+
+function MCR() {
+	global $mcrets;
+	$mcrets = MCRETS::getInstance();	
+
+	return $mcrets;
+}

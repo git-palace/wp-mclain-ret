@@ -12,7 +12,11 @@
 			contentType: false,
 			processData: false,
 			success: function (data) {
-				console.log(data);
+				if (data) {
+					window.location.reload();
+				} else {
+					alert("There's problem to save sandicore credentials. Please contact support team!")
+				}
 			}
 		})
 	});

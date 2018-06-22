@@ -6,7 +6,10 @@ function mclain_rets_options_page()
 		'McLain RETS Management',
 		'MCLain RETS',
 		'manage_options',
-		'mclain-rets'
+		'mclain-rets',
+		function() {
+			include "manage-properties.php";
+		}
 	);
 
 	add_submenu_page(
@@ -23,6 +26,5 @@ function mclain_rets_options_page()
 add_action( 'admin_menu', 'mclain_rets_options_page' );
 
 add_action( 'admin_enqueue_scripts', function() {
-	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__  ), array( 'jquery' ), '1.0.0', true );
-	
+	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__  ), array( 'jquery' ), '1.0.0', true );	
 } );

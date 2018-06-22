@@ -3,12 +3,22 @@ class MCRETS_Config {
 	public static function setConfiguration() {
 		$config = new \PHRETS\Configuration;
 
-		$config->setLoginUrl( self::getLoginURL() )
-						->setUsername( self::getUsername() )
-						->setPassword( self::getPassword() )
+		$login_url = self::getLoginURL();
+		$username = self::getUsername();
+		$password = self::getPassword();
+
+		if ( !$login_url || !$username || !$password ) {
+			return null;
+		}
+
+		$config->setLoginUrl( $login_url )
+						->setUsername( $username )
+						->setPassword( $password )
 						->setRetsVersion('1.7.2');
 
 		$rets = new \PHRETS\Session($config);
+
+		return $rets;
 	}
 
 	function getLoginURL() {
