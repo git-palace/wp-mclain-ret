@@ -5,4 +5,8 @@
 	Description:  RETs API with Sandicore fore Mclain Properties
 */
 
+require_once( 'classes\init.php' );
+
 require_once( 'templates\init.php' );
+
+require_once( 'admin-templates\init.php' );

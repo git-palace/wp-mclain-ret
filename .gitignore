@@ -1,2 +1,4 @@
-vendor/
-composer.lock
+classes/PHRETS/vendor/
+classes/PHRETS/composer.lock
+classes/PHRETS/.idea
+classes/PHRETS/coverage/
