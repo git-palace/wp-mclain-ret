@@ -23,5 +23,6 @@ function mclain_rets_options_page()
 add_action( 'admin_menu', 'mclain_rets_options_page' );
 
 add_action( 'admin_enqueue_scripts', function() {
-	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__  ), array( 'jquery' ), '1.0.0', true );	
+	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__  ), array( 'jquery' ), '1.0.0', true );
+	
 } );
