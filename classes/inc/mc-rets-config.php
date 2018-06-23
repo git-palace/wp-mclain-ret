@@ -14,7 +14,8 @@ class MCRETS_Config {
 		$config->setLoginUrl( $login_url )
 						->setUsername( $username )
 						->setPassword( $password )
-						->setRetsVersion('1.7.2');
+						->setRetsVersion( '1.7.2' )
+						->setHttpAuthenticationMethod( 'basic' );
 
 		$rets = new \PHRETS\Session($config);
 
