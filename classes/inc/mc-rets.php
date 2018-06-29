@@ -2,11 +2,17 @@
 class MCRETS {
 	private static $instance = null;
 	private $rets = null;
+	private $properties;
+	private $openhouses;
 
 	// constructor
 	private function __construct() {
 		if ( class_exists( "MCRETS_Config") ) {
 			$this->rets = MCRETS_Config::setConfiguration();
+		}
+
+		if ( $this->login() ) {
+			$this->populateProperties();
 		}
 	}
 
@@ -19,7 +25,7 @@ class MCRETS {
 	}
 
 	// login to sandicore
-	function Login() {
+	function login() {
 		try {
 			$this->rets->Login();
 			return true;
@@ -28,16 +34,12 @@ class MCRETS {
 		}
 	}
 
-	// get all open houses
-	function getAllOpenHouses() {
-		if ( !$this->Login() )
-			return array();
-
-		echo "<pre>";
-
-		// $classes = $this->rets->GetClassesMetadata( 'OpenHouse' );
-		$search = $this->rets->Search( 'Property', 'RT_4', '(PostalCode=92008)', ['Limit' => 3] );
-
-		echo "</pre>";
+	// populate properties
+	function populateProperties() {
+		//, RI_2, LN_3, RT_4, RN_6, OF_9, LR_11
+		$results = $this->rets->Search( 'Property', 'RE_1', '(L_City=San Diego)', ['Limit' => 3]);
+		/*echo "<pre>";
+		print_r( $results );
+		echo "</pre>";*/
 	}
 }
