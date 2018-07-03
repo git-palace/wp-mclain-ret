@@ -16,6 +16,17 @@
 				<th scope="row"><label for="password">Password:</label></th>
 				<td><input name="password" type="text" id="password" class="regular-text" value="<?php echo MCRETS_Config::getPassword(); ?>"></td>
 			</tr>
+
+			<tr>
+				<th scope="row"><label for="autosave">Run Cron Job:</label></th>
+				<td>
+					<select name="autosave" id="autosave">
+						<option <?php echo MCRETS_Config::getAutoSave() == "yes" ? "selected" : "" ?> value="yes">Yes</option>
+						<option <?php echo MCRETS_Config::getAutoSave() != "yes" ? "selected" : "" ?> value="no">No</option>
+					</select>
+					<p>Will run now and schedule it.</p>
+				</td>
+			</tr>
 		</tbody>
 	</table>
 

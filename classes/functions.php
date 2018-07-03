@@ -20,7 +20,8 @@ function update_mclain_config() {
 		MCRETS_Config::saveConfig( array(
 			"login_url" => $_POST["login_url"],
 			"username"	=> $_POST["username"],
-			"password"	=> $_POST["password"]
+			"password"	=> $_POST["password"],
+			"autosave"	=> $_POST["autosave"] 
 		) );
 
 		return true;
