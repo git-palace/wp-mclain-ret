@@ -2,6 +2,7 @@
 /*
 ID 					=> table unique id
 listing_ID	=> L_ListingID
+area  			=> L_Area
 addr_num		=> L_AddressNumber
 addr_st 		=> L_AddressStreet
 addr_2		=> L_Address2
@@ -144,5 +145,8 @@ county 			=> LM_Char10_1
 							Yuba	Yuba	Yuba
 photo_count	=> L_PictureCount 
 year_built	=> LM_Int2_1 
+inter_sqft 	=> LM_Int4_1 
 lotsize_sqft	=> LM_Int4_6 
-parking_total => LM_Int4_8 
+parking_total => LM_Int4_8 	
+status 				=> L_Status
+domls 				=> L_DOMLS

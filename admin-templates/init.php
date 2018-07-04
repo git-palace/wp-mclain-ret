@@ -3,23 +3,23 @@
 function mclain_rets_options_page()
 {
 	add_menu_page(
-		'McLain RETS Management',
-		'MCLain RETS',
+		'McLain RETS',
+		'Mclain RETS',
 		'manage_options',
 		'mclain-rets',
 		function() {
-			include "manage-properties.php";
+			include "config.php";
 		}
 	);
 
 	add_submenu_page(
 		'mclain-rets',
-		'McLain RETS Configuration',
-		'Configuration',
+		'McLain Properties',
+		'Properties',
 		'manage_options',
-		'mclain-rets-config',
+		'mclain-rets-properties',
 		function() {
-			include "config.php";
+			include "manage-properties.php";			
 		}
 	);
 }
