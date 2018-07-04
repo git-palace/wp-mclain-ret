@@ -1,5 +1,7 @@
 <form id="mclain-rets-config">
-	<h2>McLain Sandicore Configuration</h2>
+	<h1 class="wp-heading-inline">McLain Sandicore Configuration</h1>
+	<hr class="wp-header-end">
+
 	<table class="form-table">
 		<tbody>
 			<tr>

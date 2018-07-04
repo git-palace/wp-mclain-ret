@@ -30,15 +30,30 @@ class MCRETS {
 		}
 	}
 
+	// get Resource Classes
+	function getResourceClasses( $type = "property" ) {
+		switch ( $type ) {
+			case 'property':
+				return ['RE_1', 'RI_2', 'LN_3', 'RT_4', 'RN_6', 'OF_9', 'LR_11'];
+
+			case 'open_house':
+				return ['RE_1', 'RI_2'];
+		}
+
+		return [];
+	}
+
 	// populate properties
-	function getProperties( $filter = 'Property', $class = 'RE_1', $perPage = 10, $offset = 0) {
+	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1', $perPage = 10, $offset = 0) {
 		$results = $this->rets->Search( $filter, $class, '(L_City=San Diego)', ['Limit' => $perPage, 'Offset' => $offset]);
 		return $results;
 	}
 
+	// auto populate database
 	function populateDB() {
 		$populatingDB = get_option( "populatingDB", false );
 
+		// to prevent overwritting
 		if ( $populatingDB == "yes" )
 			return;
 
@@ -48,6 +63,7 @@ class MCRETS {
 		global $wpdb;
 		$table_name = $wpdb->prefix."mc_rets";
 
+		// create table if it's not exisitng
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
 			$charset_collate = $wpdb->get_charset_collate();
 
@@ -91,11 +107,11 @@ class MCRETS {
 		$filters = array(
 			'property' => array(
 				'resource' => 'Property',
-				'classes' => ['RE_1', 'RI_2', 'LN_3', 'RT_4', 'RN_6', 'OF_9', 'LR_11']
+				'classes' => $this->getResourceClasses( "property" )
 			)/*,
 			'open_house' => array(
 				'resource' => 'OpenHouse',
-				'classes' => ['RE_1', 'RI_2']
+				'classes' => $this->getResourceClasses( "open_house" )
 			)*/
 		);
 
@@ -105,7 +121,7 @@ class MCRETS {
 				$offset = 0;
 
 				while ( true ) {
-					$results = $this->getProperties( $filter['resource'], $class, $perPage, $offset );
+					$results = $this->getDataFromSandicore( $filter['resource'], $class, $perPage, $offset );
 					$offset += 1;
 
 					if ( !count( $results ) )
@@ -124,14 +140,15 @@ class MCRETS {
 		delete_option( "populatingDB" );
 	}
 
+	// add to database
 	function addPropertyToDB( $property ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix."mc_rets";
 
-		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `$table_name` WHERE `listing_ID` = '%s'", $property['L_ListingID'] ) );
+		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ) );
 
 		if ( $count ) {
-			$wpdb->query( sprintf( "DELETE * FROM `$table_name` WHERE `listing_ID` = '%s'", $property['listing_ID'] ) );
+			$wpdb->query( sprintf( "DELETE * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['listing_ID'] ) );
 		}
 
 		$data = array(
@@ -164,5 +181,63 @@ class MCRETS {
 		);
 
 		$wpdb->insert( $table_name, $data );
+	}
+
+	// get table headers
+	function getVisibleHeaders( $excludes = [] ) {
+		$headers = array(
+			'listing_ID' 		=> 'Listing ID',
+			'type'					=> 'Type',
+			'area'					=> 'Area ',
+			'address'				=> 'Address',
+			'county'				=> 'County',
+			'low_price'			=> 'Low Price',
+			'supplement'		=> 'Supplement',
+			'sr_type'				=> 'For Sale / Rent',
+			'v_type'				=> 'View Type',
+			'c_parking'			=> 'Parking Garage',
+			'beds_num'			=> 'Bedrooms',
+			'baths_num'			=> 'Bathrooms',
+			'photo_count'		=> 'Photos Count',
+			'year_built'		=> 'Year Built',
+			'inter_sqft'		=> 'Interior Sqft',
+			'lotsize_sqft'	=> 'Lot size Sqft',
+			'parking_total'	=> 'Parking Total',
+			'listing_date'	=> 'Listing Date',
+			'status'				=> 'Status',
+			'domls'					=> 'Days on Market',
+			'inclusion'			=> 'Inclusions'
+		);
+
+		
+		return array_diff( $headers, $excludes );
+	}
+
+	// get Data
+	function getDataFromLocal( $limits = ['perPage' => 10, 'pageIdx' => 1], $where = [] ) {
+		global $wpdb;
+		
+		$table_name = $wpdb->prefix."mc_rets";
+		$sql = sprintf( "SELECT * FROM `%s` WHERE", $table_name );
+
+		if ( !count( $where ) ) {
+			$sql .= " 1";
+		}
+
+		foreach ( $where as $field => $value ) {
+			if ( end( $where ) == $value )
+				$sql .= sprintf( " `%s` = '%s'", $field, $value );
+			else
+				$sql .= sprintf( " `%s` = '%s' AND", $field, $value );
+		}
+
+		if (
+			isset( $limits['perPage'] ) && !empty( $limits['perPage'] ) &&
+			isset( $limits['pageIdx'] ) && !empty( $limits['pageIdx'] )
+		) {
+			$sql .= sprintf( " LIMIT %d, %d", ( intval( $limits['pageIdx'] ) - 1 ) * $limits['perPage'], $limits['perPage'] );
+		}
+
+		return $wpdb->get_results( $sql, OBJECT );
 	}
 }

@@ -1,0 +1,7 @@
+.wp-header-end {
+	margin: 4px 0;
+}
+
+#adminmenu a[href="admin.php?page=mclain-single-property"] {
+	display: none;
+}

@@ -12,5 +12,5 @@ add_shortcode( 'search-form', function( $atts ) {
 });
 
 add_action( 'wp_enqueue_scripts', function() {
-	wp_enqueue_style( 'style', plugin_dir_url( __FILE__ ).'assets/css/style.css' );
+	wp_enqueue_style( 'style', plugins_url( 'assets/css/style.css', __FILE__ ) );
 });
