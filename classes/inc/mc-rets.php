@@ -4,11 +4,14 @@ class MCRETS {
 	private $rets = null;
 	private $properties;
 	private $openhouses;
+	private $brelicense;
 
 	// constructor
 	private function __construct() {
 		if ( class_exists( "MCRETS_Config") ) {
-			$this->rets = MCRETS_Config::setConfiguration();
+			$config = MCRETS_Config::setConfiguration();
+			$this->rets = $config["rets"];
+			$this->brelicense = $config["brelicense"];
 		}
 	}
 
@@ -43,9 +46,28 @@ class MCRETS {
 		return [];
 	}
 
+	// add bre license to dmql
+	function getDMQL( $args = []) {
+		$args = array_merge( $args, ['LM_char10_48' => $this->brelicense] );
+
+		$query = '(';
+		foreach ( $args as $key => $value )
+			$query .= sprintf('%s=%s', $key, $value) . ( $value == end( $args ) ? '' : '),(' );
+		$query .= ')';
+
+		return $query;
+	}
+
+	function test() {
+		$dmql = $this->getDMQL(['L_City' => 'San Diego']);
+		return $this->rets->Search( 'Property', 'RE_1', $dmql );
+
+	}
+
 	// populate properties
-	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1', $offset = 0 ) {
-		$results = $this->rets->Search( $filter, $class, '(L_City=San Diego)', ['Limit' => 150, 'Offset' => $offset] );
+	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1' ) {
+		$dmql = $this->getDMQL([]);
+		$results = $this->rets->Search( $filter, $class, $dmql );
 		return $results;
 	}
 
@@ -124,23 +146,19 @@ class MCRETS {
 
 		foreach ( $filters as $type => $filter ) {
 			foreach ( $filter['classes'] as $class ) {
-				$offset = 0;
-				while ( true ) {
-					$results = $this->getDataFromSandicore( $filter['resource'], $class, $offset );
+				$results = $this->getDataFromSandicore( $filter['resource'], $class );
 
-					if ( !count( $results ) )
-						break;
+				if ( !count( $results ) )
+					break;
 
-					foreach ( $results as $result ) {
+				foreach ( $results as $result ) {
+					if ( !in_array( $result['L_ListingID'], $listingIDs ) )
 						array_push( $listingIDs, $result['L_ListingID'] );
 
-						if ( $type == 'property' )
-							$this->addPropertyToDB( $result );
-						// else
-							// $this->addOpenHouseToDB( $result );
-					}
-
-					$offset += 150;
+					if ( $type == 'property' )
+						$this->addPropertyToDB( $result );
+					// else
+						// $this->addOpenHouseToDB( $result );
 				}
 			}
 		}
@@ -248,5 +266,15 @@ class MCRETS {
 		}
 
 		return $wpdb->get_results( $sql, OBJECT );
+	}
+
+	// get total number by type
+	function getTotalNumberByType( $type ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix."mc_rets";
+
+		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `type` = '%s'", $table_name, $type ) );
+
+		return $count;
 	}
 }

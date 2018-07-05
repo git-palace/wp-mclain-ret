@@ -18,6 +18,11 @@
 				<th scope="row"><label for="password">Password:</label></th>
 				<td><input name="password" type="text" id="password" class="regular-text" value="<?php echo MCRETS_Config::getPassword(); ?>"></td>
 			</tr>
+			
+			<tr>
+				<th scope="row"><label for="password">BRE License:</label></th>
+				<td><input name="brelicense" type="text" id="brelicense" class="regular-text" value="<?php echo MCRETS_Config::getBRELicense(); ?>"></td>
+			</tr>
 
 			<tr>
 				<th scope="row"><label for="autosave">Run Cron Job:</label></th>

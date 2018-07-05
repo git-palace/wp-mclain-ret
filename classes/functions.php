@@ -24,12 +24,14 @@ function update_mclain_config() {
 		isset( $_POST["login_url"] ) && !empty( $_POST["login_url"] ) &&
 		isset( $_POST["username"] ) && !empty( $_POST["username"] ) &&
 		isset( $_POST["password"] ) && !empty( $_POST["password"] ) &&
+		isset( $_POST["brelicense"] ) && !empty( $_POST["brelicense"] ) &&
 		class_exists( "MCRETS_Config" )
 	) {
 		return MCRETS_Config::saveConfig( array(
 			"login_url" => $_POST["login_url"],
 			"username"	=> $_POST["username"],
 			"password"	=> $_POST["password"],
+			"brelicense" => $_POST["brelicense"],
 			"autosave"	=> $_POST["autosave"] 
 		) );
 	}

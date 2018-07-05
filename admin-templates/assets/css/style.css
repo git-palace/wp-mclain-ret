@@ -5,3 +5,7 @@
 #adminmenu a[href="admin.php?page=mclain-single-property"] {
 	display: none;
 }
+
+td[valign="middle"] {
+	vertical-align: middle;
+}

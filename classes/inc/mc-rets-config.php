@@ -19,7 +19,7 @@ class MCRETS_Config {
 
 		$rets = new \PHRETS\Session($config);
 
-		return $rets;
+		return ["rets" => $rets, "brelicense" => self::getBRELicense()];
 	}
 
 	function getLoginURL() {
@@ -38,6 +38,12 @@ class MCRETS_Config {
 		$config = get_option( 'sandicore_config', false );
 
 		return $config ? $config["password"] : false;
+	}
+
+	function getBRELicense() {
+		$config = get_option( 'sandicore_config', false );
+
+		return $config ? $config["brelicense"] : false;		
 	}
 
 	function getAutoSave() {
@@ -59,8 +65,12 @@ class MCRETS_Config {
 			}
 
 			if( $config["autosave"] == "yes" ) {
+				global $wpdb;
+				$table_name = $wpdb->prefix . "mc_rets";
+				$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
+
 				wp_schedule_single_event( time() + 60, "MCRETSCronJob" );
-				wp_schedule_event( time(), 'daily', 'MCRETSCronJob' );
+				wp_schedule_event( time(), 'every_six_hours', 'MCRETSCronJob' );
 			}
 		}
 
