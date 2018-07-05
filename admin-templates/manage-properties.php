@@ -1,9 +1,31 @@
 <?php
-$headers = MCR()->getVisibleHeaders( ['Type', 'Supplement', 'Bedrooms', 'Bathrooms', 'Parking Garage', 'Parking Total', 'Days on Market', 'Inclusions'] );
+$headers = MCR()->getExcludedHeaders( 
+	'property',
+	[
+		'Resource', 
+		'Address Num', 
+		'Address St',
+		'Address 2',
+		'System Price',
+		'Low Price', 
+		'Sold Price',
+		'Supplement', 
+		'View Type',
+		'Bedrooms',
+		'Bathrooms',
+		'Photos Count', 
+		'Interior Sqft',
+		'Lot size Sqft',
+		'Parking Garage', 
+		'Parking Total', 
+		'Days on Market', 
+		'Inclusions'
+	] 
+);
 $limits = ['perPage' => 20, 'pageIdx' => 1];
-$where = ['type' => 'property'];
+$where = ['resource' => 'property'];
 $results = MCR()->getDataFromLocal( $limits, $where );
-$total = MCR()->getTotalNumberByType( 'property' );
+$total = MCR()->getTotalNumberByResource( 'property' );
 ?>
 
 <div class="wrap">
@@ -56,6 +78,7 @@ $total = MCR()->getTotalNumberByType( 'property' );
 				<?php foreach ( $headers as $className ) : ?>
 					<th><b><?php _e( $className ) ?></b></th>
 				<?php endforeach; ?>
+				<th><b>Action</b></th>
 			</tr>
 		</thead>
 
@@ -65,6 +88,7 @@ $total = MCR()->getTotalNumberByType( 'property' );
 				<?php foreach ( $headers as $className ) : ?>
 					<th><b><?php _e( $className ) ?></b></th>
 				<?php endforeach; ?>
+				<th><b>Action</b></th>
 			</tr>
 		</tfoot>
 
