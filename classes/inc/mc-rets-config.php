@@ -1,21 +1,4 @@
 <?php
-function custom_cron_schedule( $schedules ) {
-		$schedules['every_six_hours'] = array(
-				'interval' => 21600, // Every 6 hours
-				'display'  => __( 'Every 6 hours' ),
-		);
-		return $schedules;
-}
-add_filter( 'cron_schedules', 'custom_cron_schedule' );
-
-///Hook into that action that'll fire every six hours
- add_action( 'MCRETSCronJob', 'MCRETSCronJob_function' );
-
-//create your function, that runs on cron
-function MCRETSCronJob_function() {
-	MCR()->populateDB();
-}
-
 class MCRETS_Config {
 	public static function setConfiguration() {
 		$config = new \PHRETS\Configuration;
@@ -66,23 +49,21 @@ class MCRETS_Config {
 		update_option( 'sandicore_config', $config );
 
 		if ( class_exists( "MCRETS" ) ) {
-			if( $config["autosave"] == "yes" ) {
-				//Schedule an action if it's not already scheduled
-				$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
+			//Schedule an action if it's not already scheduled
+			$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
+			
+			while ( $timestamp ) {
+				wp_unschedule_event( $timestamp, "MCRETSCronJob" );
 				
-				if ( $timestamp ) {
-					wp_unschedule_event( $timestamp, "MCRETSCronJob" );
-				}
+				$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
+			}
 
+			if( $config["autosave"] == "yes" ) {
 				wp_schedule_single_event( time() + 60, "MCRETSCronJob" );
-				wp_schedule_event( time(), 'every_six_hours', 'MCRETSCronJob' );
-			} else {
-				$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
-				
-				if ( $timestamp ) {
-					wp_unschedule_event( $timestamp, "MCRETSCronJob" );
-				}
+				wp_schedule_event( time(), 'daily', 'MCRETSCronJob' );
 			}
 		}
+
+		return true;
 	}
 }

@@ -44,24 +44,20 @@ class MCRETS {
 	}
 
 	// populate properties
-	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1', $perPage = 10, $offset = 0) {
-		$results = $this->rets->Search( $filter, $class, '(L_City=San Diego)', ['Limit' => $perPage, 'Offset' => $offset]);
+	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1', $offset = 0 ) {
+		$results = $this->rets->Search( $filter, $class, '(L_City=San Diego)', ['Limit' => 150, 'Offset' => $offset] );
 		return $results;
 	}
 
 	// auto populate database
 	function populateDB() {
-		$populatingDB = get_option( "populatingDB", false );
+		if ( !$this->login() )
+			return "failed to login";
 
-		// to prevent overwritting
-		if ( $populatingDB == "yes" )
-			return;
-
-		update_option( "populatingDB", "yes" );
 		ini_set('max_execution_time', 0);
 
 		global $wpdb;
-		$table_name = $wpdb->prefix."mc_rets";
+		$table_name = $wpdb->prefix . "mc_rets";
 
 		// create table if it's not exisitng
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
@@ -88,13 +84,14 @@ class MCRETS {
 					baths_num varchar(5) NOT NULL DEFAULT 0,
 					county  varchar(10) NOT NULL DEFAULT '',
 					photo_count varchar(10) NOT NULL DEFAULT 0,
-					year_built varchar(5) NOT NULL,
+					year_built varchar(20) NOT NULL,
 					inter_sqft varchar(10) NOT NULL DEFAULT 0,
 					lotsize_sqft varchar(10) NOT NULL DEFAULT 0,
 					parking_total varchar(10) NOT NULL DEFAULT 0,
 					status varchar(20) NOT NULL DEFAULT '',
 					domls varchar(10) NOT NULL DEFAULT '',
 					inclusion varchar(10) NOT NULL DEFAULT '',
+					created_at varchar(20) NOT NULL DEFAULT '',
 					PRIMARY KEY  (ID),
 					UNIQUE KEY `listing_ID` (`listing_ID`)
 				) $charset_collate;
@@ -102,7 +99,17 @@ class MCRETS {
 
 			require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 			dbDelta( $sql );
+
+			delete_transient( "populating-db" );
 		}
+
+		$listingIDs = [];
+		$populating = get_transient( "populating-db" );
+
+		if ( $populating == "yes" )
+			return $listingIDs;
+		else
+			set_transient( "populating-db", "yes", 72000 );
 
 		$filters = array(
 			'property' => array(
@@ -117,39 +124,35 @@ class MCRETS {
 
 		foreach ( $filters as $type => $filter ) {
 			foreach ( $filter['classes'] as $class ) {
-				$perPage = 30;
 				$offset = 0;
-
 				while ( true ) {
-					$results = $this->getDataFromSandicore( $filter['resource'], $class, $perPage, $offset );
-					$offset += 1;
+					$results = $this->getDataFromSandicore( $filter['resource'], $class, $offset );
 
 					if ( !count( $results ) )
 						break;
 
 					foreach ( $results as $result ) {
+						array_push( $listingIDs, $result['L_ListingID'] );
+
 						if ( $type == 'property' )
 							$this->addPropertyToDB( $result );
 						// else
 							// $this->addOpenHouseToDB( $result );
 					}
+
+					$offset += 150;
 				}
 			}
 		}
 		
-		delete_option( "populatingDB" );
+		delete_transient( "populating-db" );
+		return $listingIDs;
 	}
 
 	// add to database
 	function addPropertyToDB( $property ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix."mc_rets";
-
-		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ) );
-
-		if ( $count ) {
-			$wpdb->query( sprintf( "DELETE * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['listing_ID'] ) );
-		}
 
 		$data = array(
 			'listing_ID' 		=> $property['L_ListingID'],
@@ -177,10 +180,16 @@ class MCRETS {
 			'parking_total'	=> $property['LM_Int4_8'],
 			'status'				=> $property['L_Status'],
 			'domls'					=> $property['L_DOMLS'],
-			'inclusion'			=> ''
+			'inclusion'			=> '',
+			'created_at'		=> date('Y-m-d H:i:s')
 		);
 
-		$wpdb->insert( $table_name, $data );
+		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ) );
+
+		if ( $count )
+			$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['listing_ID'] ) );
+		else
+			$wpdb->insert( $table_name, $data );
 	}
 
 	// get table headers

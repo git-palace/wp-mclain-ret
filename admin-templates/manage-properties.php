@@ -1,17 +1,4 @@
-<?php if ( !MCR()->login() ) : ?>
-
-	<script type="text/javascript">
-		window.location.href = "/wp-admin/admin.php?page=mclain-rets-config";
-	</script>
-
-<?php else: ?>
-
 <?php
-
-	/*$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
-	$date = new DateTime();
-	$date->setTimestamp( $timestamp );
-	echo $date->format('U = Y-m-d H:i:s') . "\n";*/
 	$headers = MCR()->getVisibleHeaders( ['Type', 'Supplement', 'Bedrooms', 'Bathrooms', 'Parking Garage', 'Parking Total', 'Days on Market', 'Inclusions'] );
 	$limits = ['perPage' => 20, 'pageIdx' => 1];
 	$where = ['type' => 'property'];
@@ -57,5 +44,3 @@
 		</tbody>
 	</table>
 </div>
-
-<?php endif; ?>
