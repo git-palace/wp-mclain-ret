@@ -1,12 +1,14 @@
 <?php
 /*
 	Plugin Name:  Sandicor RETs
-	Plugin URI:   https://github.com/git-palace/wp-sandicor-ret
-	Description:  RETs API with sandicor for McLain Properties
+	Plugin URI:   https://github.com/git-palace/wp-sandicor-rets
+	Description:  Sandicor RETs
 */
 
-require_once( 'classes\init.php' );
+define( 'SR_PLUGIN_PATH', plugin_dir_path( __FILE__ ) );
 
-require_once( 'templates\init.php' );
+require_once( SR_PLUGIN_PATH . 'classes/init.php' );
 
-require_once( 'admin-templates\init.php' );
+require_once( SR_PLUGIN_PATH . 'templates/init.php' );
+
+require_once( SR_PLUGIN_PATH . 'admin-templates/init.php' );

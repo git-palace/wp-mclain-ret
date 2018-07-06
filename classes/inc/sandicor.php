@@ -80,7 +80,7 @@ class Sandicor {
 		ini_set('max_execution_time', 0);
 
 		global $wpdb;
-		$table_name = $wpdb->prefix . "mc_rets";
+		$table_name = $wpdb->prefix . "sandicor_rets";
 
 		// create table if it's not exisitng
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
@@ -121,8 +121,8 @@ class Sandicor {
 					class varchar(20) NOT NULL DEFAULT '',
 					listing_date varchar(20) NOT NULL DEFAULT '',
 					status varchar(20) NOT NULL DEFAULT '',
-					created_at varchar(20) NOT NULL DEFAULT '',
 					created_by varchar(20) NOT NULL DEFAULT '',
+					created_at varchar(20) NOT NULL DEFAULT '',
 					PRIMARY KEY  (ID),
 					UNIQUE KEY `listing_ID` (`listing_ID`)
 				) $charset_collate;
@@ -178,7 +178,7 @@ class Sandicor {
 	// add to database
 	function addToLocalDB( $property ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix."mc_rets";
+		$table_name = $wpdb->prefix . "sandicor_rets";
 
 		$default = array(
 			'listing_ID' 		=> $property['L_ListingID'],
@@ -307,7 +307,7 @@ class Sandicor {
 	function getDataFromLocalDB( $limits = ['perPage' => 10, 'pageIdx' => 1], $where = [] ) {
 		global $wpdb;
 		
-		$table_name = $wpdb->prefix."mc_rets";
+		$table_name = $wpdb->prefix."sandicor_rets";
 		$sql = sprintf( "SELECT * FROM `%s` WHERE", $table_name );
 
 		if ( !count( $where ) ) {
@@ -334,7 +334,7 @@ class Sandicor {
 	// get total number by resource
 	function getTotalNumberByResource( $resource ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix."mc_rets";
+		$table_name = $wpdb->prefix."sandicor_rets";
 
 		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `resource` = '%s'", $table_name, $resource ) );
 

@@ -20,10 +20,10 @@
 		</td>
 	<?php endforeach; ?>
 	<td align="center">
-		<a href="/wp-admin/admin.php?page=mclain-single-property&id=<?php _e( $result->ID ); ?>&action=edit">Edit</a>
+		<a href="/wp-admin/admin.php?page=sandicor-single-property&id=<?php _e( $result->ID ); ?>&action=edit">Edit</a>
 		<span>&nbsp;|&nbsp;</span>
 		<a href="#<?php _e( $result->ID ); ?>">Delete</a>
 		<span>&nbsp;|&nbsp;</span>
-		<a href="/wp-admin/admin.php?page=mclain-single-property&id=<?php _e( $result->ID ); ?>&action=details">View</a>
+		<a href="/wp-admin/admin.php?page=sandicor-single-property&id=<?php _e( $result->ID ); ?>&action=details">View</a>
 	</td>
 </tr>

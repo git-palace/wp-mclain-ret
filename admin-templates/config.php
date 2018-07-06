@@ -1,4 +1,4 @@
-<form id="mclain-rets-config">
+<form id="sandicor-config">
 	<h1 class="wp-heading-inline">Sandicor Configuration</h1>
 	<hr class="wp-header-end">
 

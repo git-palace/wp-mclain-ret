@@ -11,21 +11,23 @@ add_action( 'admin_menu', function() {
 	);
 
 	add_menu_page(
-		'Sandicor',
-		'Sandicor',
+		'Sandicor RETs',
+		'Sandicor RETs',
 		'manage_options',
-		'mclain-properties',
+		'sandicor',
 		function() {
 			include "properties.php";
-		}
+		},
+		'dashicons-admin-site',
+		20
 	);
 
 	/*add_submenu_page(
-		'mclain-properties',
-		'Single Property in Mclain',
+		'sandicor-properties',
+		'Single Property',
 		null,
 		'manage_options',
-		'mclain-single-property',
+		'sandicor-single-property',
 		function() {
 			include "single-property.php";			
 		}

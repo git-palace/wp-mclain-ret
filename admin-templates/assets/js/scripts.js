@@ -1,12 +1,12 @@
 (function($) {
-	$("form#mclain-rets-config").submit(function(e) {
+	$("form#sandicor-config").submit(function(e) {
 		e.preventDefault();
 
 		var formData = new FormData($(this)[0]);
 
 		$.ajax({
 			type: "post",
-			url: "/wp-json/mclain-rets/update-config",
+			url: "/wp-json/sandicor/update-config",
 			data: formData,
 			cache: false,
 			contentType: false,

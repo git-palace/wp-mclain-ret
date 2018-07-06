@@ -54,7 +54,7 @@ class SandicorConfig {
 	public static function saveConfig($config) {
 		update_option( 'sandicor_config', $config );
 
-		if ( class_exists( "Sandicore" ) ) {
+		if ( class_exists( "Sandicor" ) ) {
 			//Schedule an action if it's not already scheduled
 			$timestamp = wp_next_scheduled( 'sandicor_cronjob' );
 			

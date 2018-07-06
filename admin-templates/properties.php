@@ -29,7 +29,7 @@ $total = SI()->getTotalNumberByResource( 'property' );
 ?>
 
 <div class="wrap">
-	<h1 class="wp-heading-inline">Properties in McLain</h1>
+	<h1 class="wp-heading-inline">All Properties</h1>
 	<hr class="wp-header-end">
 
 	<div class="tablenav top">
