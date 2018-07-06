@@ -15,7 +15,7 @@
 				if (data) {
 					window.location.reload();
 				} else {
-					alert("There's problem to save sandicore credentials. Please contact support team!")
+					alert("There's problem to save sandicor credentials. Please contact support team!")
 				}
 			}
 		})

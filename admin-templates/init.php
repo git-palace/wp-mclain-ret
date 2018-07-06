@@ -1,28 +1,27 @@
 <?php
 add_action( 'admin_menu', function() {
-	add_menu_page(
-		'McLain RETS',
-		'Mclain RETS',
+	add_options_page(
+		'Sandicor Configuration',
+		'Sandicor Configuration',
 		'manage_options',
-		'mclain-rets',
+		'sandicor-config',
 		function() {
 			include "config.php";
 		}
 	);
 
-	add_submenu_page(
-		'mclain-rets',
-		'McLain Properties',
-		'Properties',
+	add_menu_page(
+		'Sandicor',
+		'Sandicor',
 		'manage_options',
-		'mclain-rets-properties',
+		'mclain-properties',
 		function() {
-			include "manage-properties.php";			
+			include "properties.php";
 		}
 	);
 
-	add_submenu_page(
-		'mclain-rets',
+	/*add_submenu_page(
+		'mclain-properties',
 		'Single Property in Mclain',
 		null,
 		'manage_options',
@@ -30,7 +29,7 @@ add_action( 'admin_menu', function() {
 		function() {
 			include "single-property.php";			
 		}
-	);
+	);*/
 } );
 
 add_action( 'admin_enqueue_scripts', function() {

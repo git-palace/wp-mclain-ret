@@ -1,5 +1,5 @@
 <?php
-class MCRETS {
+class Sandicor {
 	private static $instance = null;
 	private $rets = null;
 	private $properties;
@@ -8,8 +8,8 @@ class MCRETS {
 
 	// constructor
 	private function __construct() {
-		if ( class_exists( "MCRETS_Config") ) {
-			$config = MCRETS_Config::setConfiguration();
+		if ( class_exists( "SandicorConfig") ) {
+			$config = SandicorConfig::setConfiguration();
 			$this->rets = $config["rets"];
 			$this->brelicense = $config["brelicense"];
 		}
@@ -18,12 +18,12 @@ class MCRETS {
 	// get instance for singleton design pattern
 	public static function getInstance() {
 		if ( !self::$instance )
-			self::$instance = new MCRETS();
+			self::$instance = new Sandicor();
 
 		return self::$instance;
 	}
 
-	// login to sandicore
+	// login to sandicor
 	function login() {
 		try {
 			$this->rets->Login();
@@ -47,7 +47,7 @@ class MCRETS {
 	}
 
 	// populate properties
-	function getDataFromSandicore( $filter = 'Property', $class = 'RE_1' ) {
+	function getDataFromSandicor( $filter = 'Property', $class = 'RE_1' ) {
 		$args = [];
 
 		switch ( $filter) {
@@ -122,6 +122,7 @@ class MCRETS {
 					listing_date varchar(20) NOT NULL DEFAULT '',
 					status varchar(20) NOT NULL DEFAULT '',
 					created_at varchar(20) NOT NULL DEFAULT '',
+					created_by varchar(20) NOT NULL DEFAULT '',
 					PRIMARY KEY  (ID),
 					UNIQUE KEY `listing_ID` (`listing_ID`)
 				) $charset_collate;
@@ -154,7 +155,7 @@ class MCRETS {
 
 		foreach ( $filters as $resource => $filter ) {
 			foreach ( $filter['classes'] as $class ) {
-				$results = $this->getDataFromSandicore( $filter['resource'], $class );
+				$results = $this->getDataFromSandicor( $filter['resource'], $class );
 
 				if ( !count( $results ) )
 					break;
@@ -164,7 +165,8 @@ class MCRETS {
 						array_push( $listingIDs, $result['L_ListingID'] );
 
 					$result['L_Resource'] = $resource;
-					$this->addPropertyToDB( $result );
+					$result['created_by'] = 'sandicor';
+					$this->addToLocalDB( $result );
 				}
 			}
 		}
@@ -174,7 +176,7 @@ class MCRETS {
 	}
 
 	// add to database
-	function addPropertyToDB( $property ) {
+	function addToLocalDB( $property ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix."mc_rets";
 
@@ -190,7 +192,8 @@ class MCRETS {
 			'status'				=> $property['L_Status'],
 			'system_price'	=> $property['L_SystemPrice'],
 			'inclusion'			=> '',
-			'created_at'		=> date('Y-m-d H:i:s')
+			'created_at'		=> date('Y-m-d H:i:s'),
+			'created_by'		=> $property['created_by']
 		);
 
 		switch ( $property['L_Resource'] ) {
@@ -237,12 +240,14 @@ class MCRETS {
 		}
 
 
-		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ) );
+		$old_properties = $wpdb->get_results( sprintf( "SELECT * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ), ARRAY_A );
 
-		if ( $count )
-			$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['listing_ID'] ) );
-		else
+		if ( count( $old_properties ) ){
+			if ( $old_properties[0]['created_by'] == 'sandicor' )
+				$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['listing_ID'] ) );
+		}	else {
 			$wpdb->insert( $table_name, $data );
+		}
 	}
 
 	// get table headers
@@ -298,8 +303,8 @@ class MCRETS {
 		return array_diff( $headers, $excludes );
 	}
 
-	// get Data
-	function getDataFromLocal( $limits = ['perPage' => 10, 'pageIdx' => 1], $where = [] ) {
+	// get Data from local db
+	function getDataFromLocalDB( $limits = ['perPage' => 10, 'pageIdx' => 1], $where = [] ) {
 		global $wpdb;
 		
 		$table_name = $wpdb->prefix."mc_rets";

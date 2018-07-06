@@ -25,9 +25,9 @@ function update_mclain_config() {
 		isset( $_POST["username"] ) && !empty( $_POST["username"] ) &&
 		isset( $_POST["password"] ) && !empty( $_POST["password"] ) &&
 		isset( $_POST["brelicense"] ) && !empty( $_POST["brelicense"] ) &&
-		class_exists( "MCRETS_Config" )
+		class_exists( "SandicorConfig" )
 	) {
-		return MCRETS_Config::saveConfig( array(
+		return SandicorConfig::saveConfig( array(
 			"login_url" => $_POST["login_url"],
 			"username"	=> $_POST["username"],
 			"password"	=> $_POST["password"],
@@ -40,14 +40,15 @@ function update_mclain_config() {
 }
 
 function populate_database() {
-	return MCR()->populateDB();
+	return SI()->populateDB();
 }
 
-function MCR() {
-	global $mcrets;
-	$mcrets = MCRETS::getInstance();	
+// sandicor instance
+function SI() {
+	global $sandicor;
+	$sandicor = Sandicor::getInstance();	
 
-	return $mcrets;
+	return $sandicor;
 }
 
 function custom_cron_schedule( $schedules ) {
@@ -60,6 +61,6 @@ function custom_cron_schedule( $schedules ) {
 add_filter( 'cron_schedules', 'custom_cron_schedule' );
 
 ///Hook into that action that'll fire every six hours
-add_action( 'MCRETSCronJob', function() {
+add_action( 'sandicor_cronjob', function() {
 	wp_remote_post( home_url( '/wp-json/mclain-rets/populate-db' ) );
 } );

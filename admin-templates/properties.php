@@ -1,5 +1,5 @@
 <?php
-$headers = MCR()->getExcludedHeaders( 
+$headers = SI()->getExcludedHeaders( 
 	'property',
 	[
 		'Resource', 
@@ -24,8 +24,8 @@ $headers = MCR()->getExcludedHeaders(
 );
 $limits = ['perPage' => 20, 'pageIdx' => 1];
 $where = ['resource' => 'property'];
-$results = MCR()->getDataFromLocal( $limits, $where );
-$total = MCR()->getTotalNumberByResource( 'property' );
+$results = SI()->getDataFromLocalDB( $limits, $where );
+$total = SI()->getTotalNumberByResource( 'property' );
 ?>
 
 <div class="wrap">
@@ -74,26 +74,26 @@ $total = MCR()->getTotalNumberByResource( 'property' );
 	<table class="widefat striped">
 		<thead>
 			<tr>
-				<th><b>No</b></th>
+				<th align="center"><b>No</b></th>
 				<?php foreach ( $headers as $className ) : ?>
 					<th><b><?php _e( $className ) ?></b></th>
 				<?php endforeach; ?>
-				<th><b>Action</b></th>
+				<th align="center"><b>Actions</b></th>
 			</tr>
 		</thead>
 
 		<tfoot>		
 			<tr>
-				<th><b>No</b></th>
+				<th align="center"><b>No</b></th>
 				<?php foreach ( $headers as $className ) : ?>
 					<th><b><?php _e( $className ) ?></b></th>
 				<?php endforeach; ?>
-				<th><b>Action</b></th>
+				<th align="center"><b>Actions</b></th>
 			</tr>
 		</tfoot>
 
 		<tbody>
-			<?php foreach ( $results as $idx=> $result ) include( 'manage-properties-row-tpl.php' ); ?>
+			<?php foreach ( $results as $idx=> $result ) include( 'properties-row-tpl.php' ); ?>
 		</tbody>
 	</table>
 </div>

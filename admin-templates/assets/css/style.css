@@ -9,3 +9,7 @@
 td[valign="middle"] {
 	vertical-align: middle;
 }
+
+th[align="center"] {
+	text-align: center;
+}

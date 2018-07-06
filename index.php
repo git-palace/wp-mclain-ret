@@ -1,8 +1,8 @@
 <?php
 /*
-	Plugin Name:  Mclain Properties RETs
-	Plugin URI:   https://github.com/git-palace/wp-mclain-ret
-	Description:  RETs API with Sandicore fore Mclain Properties
+	Plugin Name:  Sandicor RETs
+	Plugin URI:   https://github.com/git-palace/wp-sandicor-ret
+	Description:  RETs API with sandicor for McLain Properties
 */
 
 require_once( 'classes\init.php' );

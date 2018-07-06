@@ -1,5 +1,5 @@
 <?php
-class MCRETS_Config {
+class SandicorConfig {
 	public static function setConfiguration() {
 		$config = new \PHRETS\Configuration;
 
@@ -23,54 +23,50 @@ class MCRETS_Config {
 	}
 
 	function getLoginURL() {
-		$config = get_option( 'sandicore_config', false );
+		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["login_url"] : false;
 	}
 
 	function getUsername() {
-		$config = get_option( 'sandicore_config', false );
+		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["username"] : false;
 	}
 
 	function getPassword() {
-		$config = get_option( 'sandicore_config', false );
+		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["password"] : false;
 	}
 
 	function getBRELicense() {
-		$config = get_option( 'sandicore_config', false );
+		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["brelicense"] : false;		
 	}
 
 	function getAutoSave() {
-		$config = get_option( 'sandicore_config', false );
+		$config = get_option( 'sandicor_config', false );
 		return $config ? $config['autosave'] : "no";
 	}
 
 	public static function saveConfig($config) {
-		update_option( 'sandicore_config', $config );
+		update_option( 'sandicor_config', $config );
 
-		if ( class_exists( "MCRETS" ) ) {
+		if ( class_exists( "Sandicore" ) ) {
 			//Schedule an action if it's not already scheduled
-			$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
+			$timestamp = wp_next_scheduled( 'sandicor_cronjob' );
 			
 			while ( $timestamp ) {
-				wp_unschedule_event( $timestamp, "MCRETSCronJob" );
+				wp_unschedule_event( $timestamp, "sandicor_cronjob" );
 				
-				$timestamp = wp_next_scheduled( 'MCRETSCronJob' );
+				$timestamp = wp_next_scheduled( 'sandicor_cronjob' );
 			}
 
 			if( $config["autosave"] == "yes" ) {
-				global $wpdb;
-				$table_name = $wpdb->prefix . "mc_rets";
-				$wpdb->query( "DROP TABLE IF EXISTS $table_name" );
-
-				wp_schedule_single_event( time() + 60, "MCRETSCronJob" );
-				wp_schedule_event( time(), 'every_six_hours', 'MCRETSCronJob' );
+				wp_schedule_single_event( time() + 60, "sandicor_cronjob" );
+				wp_schedule_event( time(), 'every_six_hours', 'sandicor_cronjob' );
 			}
 		}
 
