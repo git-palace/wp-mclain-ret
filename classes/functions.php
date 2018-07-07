@@ -81,3 +81,43 @@ add_filter( 'cron_schedules', 'custom_cron_schedule' );
 add_action( 'sandicor_cronjob', function() {
 	wp_remote_post( home_url( '/wp-json/sandicor/populate-db' ) );
 } );
+
+function getPlaceholder( $field ) {
+	switch ( $field ) {
+		case 'listing_ID':
+			return '12345678';
+
+		case 'addr_num':
+			return '123';
+
+		case 'addr_st':
+			return 'Main St';
+
+		case 'city':
+			return 'Carlsbad';
+
+		case 'state':
+			return 'CA';
+
+		case 'zip':
+			return '92029';
+
+		case 'area':
+			return 'Carlsbad (92029)';
+
+		case 'county':
+			return 'San Diego';
+			
+		case 'list_price':
+		case 'system_price':
+		case 'sold_price':
+		case 'low_price':
+			return number_format( 700000, 2 );
+
+		case $field:
+			return $field;
+		
+		default:
+			return '';
+	}
+}

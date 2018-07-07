@@ -29,7 +29,7 @@ add_action( 'admin_menu', function() {
 		'manage_options',
 		'add-sandicor',
 		function() {
-			include "single-property.php";			
+			include sprintf( "single-%s.php", $_GET['type'] );
 		}
 	);
 } );

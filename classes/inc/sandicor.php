@@ -251,7 +251,7 @@ class Sandicor {
 	}
 
 	// get table headers
-	function getExcludedHeaders( $resource = 'property', $excludes = [] ) {
+	function getExcludedHeaders( $resource = 'all', $excludes = [] ) {
 		$default = [
 			'listing_ID' 		=> 'Listing ID',
 			'resource'			=> 'Resource',
@@ -296,6 +296,9 @@ class Sandicor {
 			
 			case 'open_house':
 				break;
+
+			default:
+				break;
 		}
 
 		$headers = array_merge( $headers, ['status' => 'Status'] );
@@ -339,5 +342,54 @@ class Sandicor {
 		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `resource` = '%s'", $table_name, $resource ) );
 
 		return $count;
+	}
+
+	// get view types
+	function getAllViewTypeList() {
+		return [
+			'BAY'	=> 'Bay',
+			'BK'	=> 'Back Bay',
+			'BLF'	=> 'Bluff',
+			'BR'	=> 'Bridge',
+			'CA'	=> 'Catalina',
+			'CITY'	=> 'City',
+			'CL'	=> 'Canal',
+			'CO'	=> 'Coastline',
+			'CTYL'	=> 'City Lights',
+			'CY'	=> 'Courtyard',
+			'DE'	=> 'Desert',
+			'EVELT'	=> 'Evening Lights',
+			'GLFCR'	=> 'Golf Course',
+			'GRNBL'	=> 'Greenbelt',
+			'HA'	=> 'Harbor',
+			'LGNES'	=> 'Lagoon/Estuary',
+			'LKRVR'	=> 'Lake/River',
+			'LM'	=> 'Landmark',
+			'MA'	=> 'Marina',
+			'ME'	=> 'Meadow',
+			'MTNHL'	=> 'Mountains/Hills',
+			'NE'	=> 'Neighborhood',
+			'NK'	=> 'N/K',
+			'OCN'	=> 'Ocean',
+			'ORC'	=> 'Orchard/Grove',
+			'ORMKS'	=> 'Other/Remarks',
+			'PANO'	=> 'Panoramic',
+			'PANOC'	=> 'Panoramic Ocean',
+			'PAS'	=> 'Pasture',
+			'PE'	=> 'Peek-A-Boo',
+			'PL'	=> 'Pool',
+			'PO'	=> 'Pond',
+			'PR'	=> 'Pier',
+			'PRKLK'	=> 'Parklike',
+			'RK'	=> 'Rocks',
+			'RS'	=> 'Reservoir',
+			'STM'	=> 'Creek/Stream',
+			'TW'	=> 'Trees/Woods',
+			'VIN'	=> 'Vineyard',
+			'VLYCY'	=> 'Valley/Canyon',
+			'VT'	=> 'Vincent Thomas Bridge',
+			'WA'	=> 'Water',
+			'WW'	=> 'White Water'
+		];
 	}
 }

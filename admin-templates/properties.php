@@ -31,7 +31,7 @@ $totalPage = ceil( $total_count / $limits['perPage'] );
 
 <div class="wrap sandicor-properties">
 	<h1 class="wp-heading-inline">All Properties</h1>
-	<a href="/wp-admin/admin.php?page=add-sandicor&action=new-property" class="page-title-action">Add New</a>
+	<a href="/wp-admin/admin.php?page=add-sandicor&type=<?php _e( $where['resource'] ); ?>&action=new" class="page-title-action">Add New</a>
 	<hr class="wp-header-end">
 
 	<div class="tablenav top">
