@@ -332,7 +332,7 @@ class Sandicor {
 	}
 
 	// get total number by resource
-	function getTotalNumberByResource( $resource ) {
+	function getTotalCountByResource( $resource ) {
 		global $wpdb;
 		$table_name = $wpdb->prefix."sandicor_rets";
 

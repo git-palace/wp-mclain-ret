@@ -20,4 +20,10 @@
 			}
 		})
 	});
+
+	$("select.per-page").change(function() {
+		var resource = $(this).attr("type");
+		if (resource == 'property')
+			window.location.href = "/wp-admin/admin.php?page=sandicor&perPage=" + $(this).val();
+	});
 })(jQuery);
