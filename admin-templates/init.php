@@ -22,16 +22,16 @@ add_action( 'admin_menu', function() {
 		20
 	);
 
-	/*add_submenu_page(
-		'sandicor-properties',
+	add_submenu_page(
+		'sandicor',
 		'Single Property',
 		null,
 		'manage_options',
-		'sandicor-single-property',
+		'add-sandicor',
 		function() {
 			include "single-property.php";			
 		}
-	);*/
+	);
 } );
 
 add_action( 'admin_enqueue_scripts', function() {
