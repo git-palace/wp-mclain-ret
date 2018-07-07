@@ -1,3 +1,9 @@
+/*
+$ = jQuery;
+$.each($(".metadata_details_fields.opened td:nth-child(2)"), function(idx, obj) { 
+if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-child(3)")[idx]).text()
+});
+*/
 (function($) {
 	$("form#sandicor-config").submit(function(e) {
 		e.preventDefault();

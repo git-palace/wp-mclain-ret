@@ -107,13 +107,13 @@ class Sandicor {
 					sr_type varchar(20) NOT NULL DEFAULT '',
 					v_type varchar(20) NOT NULL DEFAULT '',
 					c_parking varchar(10) NOT NULL DEFAULT '',
+					parking_total varchar(10) NOT NULL DEFAULT '',
 					beds_num varchar(3) NOT NULL DEFAULT '',
 					baths_num varchar(5) NOT NULL DEFAULT '',
 					photo_count varchar(10) NOT NULL DEFAULT '',
 					year_built varchar(20) NOT NULL DEFAULT '',
 					inter_sqft varchar(10) NOT NULL DEFAULT '',
 					lotsize_sqft varchar(10) NOT NULL DEFAULT '',
-					parking_total varchar(10) NOT NULL DEFAULT '',
 					domls varchar(10) NOT NULL DEFAULT '',
 					inclusion varchar(10) NOT NULL DEFAULT '',
 					start_datetime varchar(20) NOT NULL DEFAULT '',
@@ -272,13 +272,13 @@ class Sandicor {
 			'sr_type'				=> 'For Sale / Rent',
 			'v_type'				=> 'View Type',
 			'c_parking'			=> 'Parking Garage',
+			'parking_total'	=> 'Parking Total',
 			'beds_num'			=> 'Bedrooms',
 			'baths_num'			=> 'Bathrooms',
 			'photo_count'		=> 'Photos Count',
 			'year_built'		=> 'Year Built',
 			'inter_sqft'		=> 'Interior Sqft',
 			'lotsize_sqft'	=> 'Lot size Sqft',
-			'parking_total'	=> 'Parking Total',
 			'domls'					=> 'Days on Market',
 			'inclusion'			=> 'Inclusions',
 			'start_datetime'	=> 'Start Datetime',
@@ -390,6 +390,48 @@ class Sandicor {
 			'VT'	=> 'Vincent Thomas Bridge',
 			'WA'	=> 'Water',
 			'WW'	=> 'White Water'
+		];
+	}
+
+	// get all parking garages
+	function getAllCoveredParkingList() {
+		return [
+			'ASGN'	=> 'Assigned',
+			'ATT'	=> 'Attached',
+			'COMG'	=> 'Community Garage',
+			'CONV'	=> 'Converted',
+			'DET'	=> 'Detached',
+			'FEG'	=> 'Garage - Front Entry',
+			'GA'	=> 'Direct Garage Access',
+			'GAR'	=> 'Garage',
+			'GATE'	=> 'Gated',
+			'GDO'	=> 'Garage Door Opener',
+			'GO'	=> 'Golf Cart Garage',
+			'HEAT'	=> 'Heated Garage',
+			'NK'	=> 'None Known',
+			'REG'	=> 'Garage - Rear Entry',
+			'SDG'	=> 'Garage - Single Door',
+			'SEG'	=> 'Garage - Side Entry',
+			'TDG'	=> 'Garage - Three Door',
+			'TNDM'	=> 'Tandem',
+			'TODG'	=> 'Garage - Two Door',
+			'UNRG'	=> 'Underground'
+		];
+	}
+
+	// get all status
+	function getAllStatusList() {
+		return [
+			'ACT'	=> 'ACTIVE',
+			'BOM'	=> 'BACK ON MARKET',
+			'CANC'	=> 'CANCELLED',
+			'CONT'	=> 'CONTINGENT',
+			'EXP'	=> 'EXPIRED',
+			'HLD'	=> 'HOLD',
+			'PEND'	=> 'PENDING',
+			'RNTD'	=> 'RENTED',
+			'SOLD'	=> 'SOLD',
+			'WITH'	=> 'WITHDRAWN'
 		];
 	}
 }

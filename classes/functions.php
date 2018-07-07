@@ -114,6 +114,26 @@ function getPlaceholder( $field ) {
 		case 'low_price':
 			return number_format( 700000, 2 );
 
+		case 'parking_total':
+		case 'beds_num':
+		case 'baths_num':
+			return '3';
+
+		case 'year_built':
+			return date("Y");
+
+		case 'inter_sqft':
+			return '1440';
+
+		case 'lotsize_sqft':
+			return '114840';
+
+		case 'domls':
+			return '7';
+
+		case 'listing_date':
+			return date("Y-m-d");
+
 		case $field:
 			return $field;
 		

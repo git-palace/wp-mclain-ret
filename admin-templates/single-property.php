@@ -1,5 +1,5 @@
 <?php
-$fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusions'] );
+$fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusions', 'Photos Count'] );
 ?>
 
 <div class="wrap">
@@ -23,18 +23,44 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 						</th>
 						<td>
 							<?php if ( $key == 'sr_type' ) : ?>
+
 								<select name="sandicor['<?php _e( $key ); ?>']">
 									<option value="S">For Sale</option>
 									<option value="R">For Rent</option>
 								</select>
-							<?php elseif( $key == 'v_type' ) : ?>
+
+							<?php elseif( in_array( $key, ['v_type', 'c_parking', 'status'] ) ) : ?>
+								<?php
+									$data = [];
+									switch ( $key ) {
+										case 'v_type':
+											$data = SI()->getAllViewTypeList();
+											break;
+
+										case 'c_parking':
+											$data = SI()->getAllCoveredParkingList();
+											break;
+
+										case 'status':
+											$data = SI()->getAllStatusList();
+											break;
+										
+										default:
+											$data = [];
+											break;
+									}
+								?>
+
 								<select name="sandicor['<?php _e( $key ); ?>']">
-									<?php foreach ( SI()->getAllViewTypeList() as $val => $txt ) : ?>
+									<?php foreach ( $data as $val => $txt ) : ?>
 										<option value="<?php _e( $val ); ?>"><?php _e( $txt ); ?></option>
 									<?php endforeach ?>
 								</select>
+
 							<?php else: ?>
+
 								<input type="text" name="sandicor['<?php _e( $key ); ?>']" class="regular-text" placeholder="<?php _e( getPlaceholder( $key ) ); ?>">
+
 							<?php endif; ?>
 						</td>
 					</tr>
