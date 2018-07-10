@@ -27,6 +27,7 @@ class Sandicor {
 	function login() {
 		try {
 			$this->rets->Login();
+			
 			return true;
 		} catch ( Exception $e ) {
 			return false;
