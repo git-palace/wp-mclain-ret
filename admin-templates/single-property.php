@@ -4,6 +4,9 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 
 <div class="wrap">
 	<form id="sandicor-config">
+		<input type="hidden" name="action" value="sandicor_update">
+		<input type="hidden" name="sandicor['id']">
+
 		<h1 class="wp-heading-inline">Add New Property</h1>
 		<hr class="wp-header-end">
 
@@ -67,5 +70,9 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+
+		<p class="submit">
+			<input type="submit" name="submit" id="submit" class="button button-primary" value="<?php _e( $_GET['action'] == 'new' ? 'Add New' : 'Save Changes' ); ?>">
+		</p>
 	</form>
 </div>

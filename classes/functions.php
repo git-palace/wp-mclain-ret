@@ -1,24 +1,19 @@
 <?php
+//==============================================================================================//
 global $perPages;
 $perPages = [10, 20, 35, 50];
 
 global $limits;
 $limits = ['perPage' => $perPages[0], 'pageIdx' => 1];
 
-if ( 
-	isset( $_GET['perPage'] ) && 
-	!empty( $_GET['perPage'] ) && 
-	in_array( $_GET['perPage'], $perPages ) 
-){
+if ( isset( $_GET['perPage'] ) && 	!empty( $_GET['perPage'] ) && 	in_array( $_GET['perPage'], $perPages ) ){
 	$limits['perPage'] = intval( $_GET['perPage'] );
 }
 
-if (
-	isset( $_GET['pageIdx'] ) &&
-	!empty( $_GET['pageIdx'] )
-) {
+if ( isset( $_GET['pageIdx'] ) &&	!empty( $_GET['pageIdx'] ) ) {
 	$limits['pageIdx'] = intval( $_GET['pageIdx'] );
 }
+//==============================================================================================//
 
 add_action( 'rest_api_init', function () {
 	register_rest_route( 
@@ -140,4 +135,9 @@ function getPlaceholder( $field ) {
 		default:
 			return '';
 	}
+}
+
+// 
+function addNewRecordtoLocalDB() {
+
 }

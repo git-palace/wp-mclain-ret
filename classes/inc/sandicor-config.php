@@ -22,31 +22,31 @@ class SandicorConfig {
 		return ["rets" => $rets, "brelicense" => self::getBRELicense()];
 	}
 
-	function getLoginURL() {
+	public static function getLoginURL() {
 		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["login_url"] : false;
 	}
 
-	function getUsername() {
+	public static function getUsername() {
 		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["username"] : false;
 	}
 
-	function getPassword() {
+	public static function getPassword() {
 		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["password"] : false;
 	}
 
-	function getBRELicense() {
+	public static function getBRELicense() {
 		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["brelicense"] : false;		
 	}
 
-	function getAutoSave() {
+	public static function getAutoSave() {
 		$config = get_option( 'sandicor_config', false );
 		return $config ? $config['autosave'] : "no";
 	}
