@@ -1,4 +1,7 @@
 <?php
+if ( $_GET['page'] == 'sandicor' && isset( $_GET['action'] ) && $_GET['action'] == 'delete' && isset( $_GET['id'] ) && !empty( $_GET['id'] ) ) {
+	SI()->deleteFromLocalDB( array( 'id' => $_GET['id'] ) );
+}
 //==============================================================================================//
 global $perPages;
 $perPages = [10, 20, 35, 50];
@@ -51,6 +54,24 @@ add_action( 'rest_api_init', function () {
 			'callback' => function() {
 				return SI()->populateDB();
 			}
+		)
+	);
+
+	register_rest_route(
+		'sandicor',
+		'add-new-property',
+		array(
+			'methods'	=> 'post',
+			'callback' => 'addNewRecordtoLocalDB'
+		)
+	);
+
+	register_rest_route(
+		'sandicor',
+		'add-new-openhouse',
+		array(
+			'methods'	=> 'post',
+			'callback' => 'addNewRecordtoLocalDB'
 		)
 	);
 } );
@@ -137,7 +158,59 @@ function getPlaceholder( $field ) {
 	}
 }
 
-// 
-function addNewRecordtoLocalDB() {
+// get value with validation
+function getValidatedValue( $property, $field, $default = '' ) {
+	if ( isset( $property[$field] ) )
+		return $property[$field];
 
+	return $default;
+}
+
+// post single property / openhouse form
+function addNewRecordtoLocalDB() {
+	if ( $_POST['action'] != 'sandicor_update' || !isset( $_POST['sandicor'] ) || empty( $_POST['sandicor'] ) )
+		return;
+
+	$property = $_POST['sandicor'];
+
+	$sandicor = [
+		'L_ListingID' => getValidatedValue( $property, 'listing_ID' ),
+		'L_Resource'	=> getValidatedValue( $property, 'resource' ),
+		'L_AddressNumber'	=> getValidatedValue( $property, 'addr_num' ),
+		'L_AddressStreet'	=> getValidatedValue( $property, 'addr_st' ),
+		'L_Address2'			=> getValidatedValue( $property, 'addr_2' ),
+		'L_Area'					=> getValidatedValue( $property, 'area' ),
+		'LM_Char10_1'			=> getValidatedValue( $property, 'county' ),
+		'L_City'	=> getValidatedValue( $property, 'city' ),
+		'L_State'	=> getValidatedValue( $property, 'state' ),
+		'L_Zip'		=> getValidatedValue( $property, 'zip' ),
+		'L_Status'	=> getValidatedValue( $property, 'status' ),
+		'L_SystemPrice'	=> getValidatedValue( $property, 'system_price' ),
+		'created_by'	=> getValidatedValue( $property, 'created_by' ),
+		'L_AskingPrice'	=> getValidatedValue( $property, 'list_price' ),
+		'L_asking_price_low'	=> getValidatedValue( $property, 'low_price' ),
+		'LR_remarks66'	=> getValidatedValue( $property, 'supplement' ),
+		'L_ListingDate'	=> getValidatedValue( $property, 'listing_date' ),
+		'L_SaleRent'	=> getValidatedValue( $property, 'sr_type' ),
+		'LFD_View_44'	=> getValidatedValue( $property, 'v_type' ),
+		'LFD_ParkingGarage_22'	=> getValidatedValue( $property, 'c_parking' ),
+		'LM_Int1_3'	=> getValidatedValue( $property, 'beds_num' ),
+		'LM_Int2_6'	=> getValidatedValue( $property, 'baths_num' ),
+		'L_PictureCount'	=> getValidatedValue( $property, 'photo_count' ),
+		'LM_Int2_1'	=> getValidatedValue( $property, 'year_built' ),
+		'LM_Int4_1'	=> getValidatedValue( $property, 'inter_sqft' ),
+		'LM_Int4_6'	=> getValidatedValue( $property, 'lotsize_sqft' ),
+		'LM_Int4_8'	=> getValidatedValue( $property, 'parking_total' ),
+		'L_SoldPrice'	=> getValidatedValue( $property, 'sold_price' ),
+		'L_DOMLS'	=> getValidatedValue( $property, 'domls' ),
+		'L_Address'	=> getValidatedValue( $property, 'address' ),
+		'OH_StartDateTime'	=> getValidatedValue( $property, 'start_datetime' ),
+		'OH_EndDateTime'	=> getValidatedValue( $property, 'end_datetime' ),
+		'L_Class'	=> getValidatedValue( $property, 'class' ),
+
+	];
+
+	SI()->addToLocalDB( $sandicor );
+
+	return $sandicor;
 }

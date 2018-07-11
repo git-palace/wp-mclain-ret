@@ -3,9 +3,11 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 ?>
 
 <div class="wrap">
-	<form id="sandicor-config">
+	<form id="sandicor-update">
 		<input type="hidden" name="action" value="sandicor_update">
-		<input type="hidden" name="sandicor['id']">
+		<input type="hidden" name="sandicor[resource]" id="resource_type" value="property">
+		<input type="hidden" name="sandicor[created_by]" value="manual">
+		<input type="hidden" name="sandicor[id]">
 
 		<h1 class="wp-heading-inline">Add New Property</h1>
 		<hr class="wp-header-end">
@@ -27,9 +29,9 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 						<td>
 							<?php if ( $key == 'sr_type' ) : ?>
 
-								<select name="sandicor['<?php _e( $key ); ?>']">
-									<option value="S">For Sale</option>
-									<option value="R">For Rent</option>
+								<select name="sandicor[<?php _e( $key ); ?>]">
+									<option value="For Sale">For Sale</option>
+									<option value="For Rent">For Rent</option>
 								</select>
 
 							<?php elseif( in_array( $key, ['v_type', 'c_parking', 'status'] ) ) : ?>
@@ -54,15 +56,15 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 									}
 								?>
 
-								<select name="sandicor['<?php _e( $key ); ?>']">
+								<select name="sandicor[<?php _e( $key ); ?>]">
 									<?php foreach ( $data as $val => $txt ) : ?>
-										<option value="<?php _e( $val ); ?>"><?php _e( $txt ); ?></option>
+										<option value="<?php _e( $txt ); ?>"><?php _e( $txt ); ?></option>
 									<?php endforeach ?>
 								</select>
 
 							<?php else: ?>
 
-								<input type="text" name="sandicor['<?php _e( $key ); ?>']" class="regular-text" placeholder="<?php _e( getPlaceholder( $key ) ); ?>">
+								<input type="text" name="sandicor[<?php _e( $key ); ?>]" class="regular-text" placeholder="<?php _e( getPlaceholder( $key ) ); ?>">
 
 							<?php endif; ?>
 						</td>

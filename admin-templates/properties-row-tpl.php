@@ -22,7 +22,7 @@
 	<td align="center">
 		<a href="/wp-admin/admin.php?page=sandicor-single-property&id=<?php _e( $result->ID ); ?>&action=edit">Edit</a>
 		<span>&nbsp;|&nbsp;</span>
-		<a href="#<?php _e( $result->ID ); ?>">Delete</a>
+		<a href="/wp-admin/admin.php?page=sandicor&action=delete&id=<?php _e( $result->ID ); ?>">Delete</a>
 		<span>&nbsp;|&nbsp;</span>
 		<a href="/wp-admin/admin.php?page=sandicor-single-property&id=<?php _e( $result->ID ); ?>&action=details">View</a>
 	</td>

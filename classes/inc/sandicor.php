@@ -176,6 +176,18 @@ class Sandicor {
 		return $listingIDs;
 	}
 
+	// detelte from local
+	function deleteFromLocalDB( $where ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . "sandicor_rets";
+
+
+		if ( isset( $where['id'] ) && !empty( $where['id'] ) )
+			$wpdb->delete( $table_name, array( 'id' => $where['id'] ) );
+		elseif( isset( $where['listing_ID'] ) && !empty( $where['listing_ID'] ) )
+			$wpdb->delete( $table_name, array( 'listing_ID' => $where['listing_ID'] ) );
+	}
+
 	// add to database
 	function addToLocalDB( $property ) {
 		global $wpdb;

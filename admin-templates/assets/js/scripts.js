@@ -32,4 +32,26 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 		if (resource == 'property')
 			window.location.href = "/wp-admin/admin.php?page=sandicor&perPage=" + $(this).val();
 	});
+
+	$("form#sandicor-update").submit(function(e) {
+		e.preventDefault();
+
+		var formData = new FormData($(this)[0]);
+
+		$.ajax({
+			type: "post",
+			url: "/wp-json/sandicor/add-new-" + $("#resource_type").val(),
+			data: formData,
+			cache: false,
+			contentType: false,
+			processData: false,
+			success: function(data) {
+				if(data)
+					console.log(data);
+					// window.location.href = "/wp-admin/admin.php?page=sandicor";
+				else
+					alert("there's problem to add/update new query.")
+			}
+		})
+	});
 })(jQuery);
