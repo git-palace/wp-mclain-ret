@@ -47,8 +47,7 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 			processData: false,
 			success: function(data) {
 				if(data)
-					console.log(data);
-					// window.location.href = "/wp-admin/admin.php?page=sandicor";
+					window.location.href = "/wp-admin/admin.php?page=sandicor";
 				else
 					alert("there's problem to add/update new query.")
 			}

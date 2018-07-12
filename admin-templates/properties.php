@@ -23,20 +23,19 @@ $headers = SI()->getExcludedHeaders(
 	] 
 );
 global $limits;
-$where = ['resource' => 'property'];
-$results = SI()->getDataFromLocalDB( $limits, $where );
+$results = SI()->getDataFromLocalDB( $limits, ['resource' => 'property'] );
 $total_count = SI()->getTotalCountByResource( 'property' );
 $totalPage = ceil( $total_count / $limits['perPage'] );
 ?>
 
 <div class="wrap sandicor-properties">
 	<h1 class="wp-heading-inline">All Properties</h1>
-	<a href="/wp-admin/admin.php?page=add-sandicor&type=<?php _e( $where['resource'] ); ?>&action=new" class="page-title-action">Add New</a>
+	<a href="/wp-admin/admin.php?page=add-sandicor&resource=property&action=new" class="page-title-action">Add New</a>
 	<hr class="wp-header-end">
 
 	<div class="tablenav top">
 		<div class="alignleft actions">
-			<select class="per-page" type="<?php _e( $where['resource']); ?>">
+			<select class="per-page" type="property">
 				<?php
 					global $perPages;
 					foreach ( $perPages as $perPage ) _e( sprintf( "<option value='%s' %s>%s</option>", $perPage, $perPage == $limits['perPage'] ? 'selected' : '', $perPage ) );

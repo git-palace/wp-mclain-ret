@@ -1,4 +1,10 @@
 <?php
+$sandicor = [];
+
+if ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && isset( $_GET['id'] ) && !empty( $_GET['id'] ) ) {
+	$sandicor = SI()->getDataFromLocalDB( ['perPage' => 1, 'pageIdx' => 1], ['id' => $_GET['id']] );
+	$sandicor = count( $sandicor ) ? $sandicor[0] : $sandicor;
+}
 $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusions', 'Photos Count'] );
 ?>
 
@@ -58,13 +64,13 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 
 								<select name="sandicor[<?php _e( $key ); ?>]">
 									<?php foreach ( $data as $val => $txt ) : ?>
-										<option value="<?php _e( $txt ); ?>"><?php _e( $txt ); ?></option>
+										<option value="<?php _e( $txt ); ?>" <?php _e( getValidatedValue( $sandicor, $key ) == $txt ? 'selected' : '' ) ?>><?php _e( $txt ); ?></option>
 									<?php endforeach ?>
 								</select>
 
 							<?php else: ?>
 
-								<input type="text" name="sandicor[<?php _e( $key ); ?>]" class="regular-text" placeholder="<?php _e( getPlaceholder( $key ) ); ?>">
+								<input type="text" name="sandicor[<?php _e( $key ); ?>]" class="regular-text" placeholder="<?php _e( getPlaceholder( $key ) ); ?>" value="<?php _e( getValidatedValue( $sandicor, $key ) ); ?>">
 
 							<?php endif; ?>
 						</td>

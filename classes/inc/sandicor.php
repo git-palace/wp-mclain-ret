@@ -256,8 +256,7 @@ class Sandicor {
 		$old_properties = $wpdb->get_results( sprintf( "SELECT * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ), ARRAY_A );
 
 		if ( count( $old_properties ) ){
-			if ( $old_properties[0]['created_by'] == 'sandicor' )
-				$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['listing_ID'] ) );
+			$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['L_ListingID'] ) );
 		}	else {
 			$wpdb->insert( $table_name, $data );
 		}

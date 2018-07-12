@@ -1,5 +1,5 @@
 <?php
-if ( $_GET['page'] == 'sandicor' && isset( $_GET['action'] ) && $_GET['action'] == 'delete' && isset( $_GET['id'] ) && !empty( $_GET['id'] ) ) {
+if ( isset( $_GET['page'] ) && $_GET['page'] == 'sandicor' && isset( $_GET['action'] ) && $_GET['action'] == 'delete' && isset( $_GET['id'] ) && !empty( $_GET['id'] ) ) {
 	SI()->deleteFromLocalDB( array( 'id' => $_GET['id'] ) );
 }
 //==============================================================================================//
@@ -95,6 +95,7 @@ add_filter( 'cron_schedules', 'custom_cron_schedule' );
 
 ///Hook into that action that'll fire every six hours
 add_action( 'sandicor_cronjob', function() {
+	delete_transient( "populating-db" );
 	wp_remote_post( home_url( '/wp-json/sandicor/populate-db' ) );
 } );
 
@@ -149,9 +150,6 @@ function getPlaceholder( $field ) {
 
 		case 'listing_date':
 			return date("Y-m-d");
-
-		case $field:
-			return $field;
 		
 		default:
 			return '';
@@ -160,8 +158,10 @@ function getPlaceholder( $field ) {
 
 // get value with validation
 function getValidatedValue( $property, $field, $default = '' ) {
-	if ( isset( $property[$field] ) )
-		return $property[$field];
+	$v_value = json_decode( json_encode( $property ), true );
+
+	if ( isset( $v_value[$field] ) )
+		return $v_value[$field];
 
 	return $default;
 }
