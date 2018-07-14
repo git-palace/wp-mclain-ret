@@ -62,7 +62,6 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 		$(this).parent("li.picture").css('-webkit-animation', 'fadeOut 500ms');
 
 		$(this).parent("li.picture").bind('webkitAnimationEnd',function() {
-			console.log("A dfadfadf");
 			$(this).remove();
 		});
 	});

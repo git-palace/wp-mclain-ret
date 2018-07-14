@@ -76,9 +76,10 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 										<li class="picture d-flex flex-column">
 											<a class="remove-picture d-none text-center"><span class="m-auto">&times;</span></a>
 											<img class="img-fluid" src="<?php _e( $picture->url ); ?>" />
+											<input type="hidden" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>][url]" value="<?php _e( $picture->url ); ?>">
 											<div class="summary d-flex align-items-center">
 												<label class="mr-auto" for="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>]">Description : </label>
-												<input class="ml-auto" type="text" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>]" value="<?php _e( $picture->desc ); ?>" />
+												<input class="ml-auto" type="text" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>][desc]" value="<?php _e( $picture->desc ); ?>" />
 											</div>
 										</li>
 
