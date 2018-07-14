@@ -52,7 +52,7 @@ add_action( 'rest_api_init', function () {
 		array(
 			'methods' => 'post',
 			'callback' => function() {
-				return SI()->populateDB();
+				return SI()->populateDB( true );
 			}
 		)
 	);

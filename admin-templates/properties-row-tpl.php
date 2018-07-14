@@ -1,7 +1,7 @@
 <tr>
-	<td align="center" valign="middle"><?php _e( 1 + $idx + ($limits['pageIdx'] - 1) * $limits['perPage'] ) ?></td>
+	<td class="text-center valign-middle"><?php _e( 1 + $idx + ($limits['pageIdx'] - 1) * $limits['perPage'] ) ?></td>
 	<?php foreach ( $headers as $key => $value): ?>
-		<td valign="middle">
+		<td class="valign-middle">
 			<?php 
 				switch ( $key ) {
 					case 'list_price':

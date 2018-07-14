@@ -1,4 +1,7 @@
 <?php
+
+// wp_schedule_single_event( time() + 60, "sandicor_cronjob" );
+
 $headers = SI()->getExcludedHeaders( 
 	'property',
 	[
@@ -13,7 +16,8 @@ $headers = SI()->getExcludedHeaders(
 		'View Type',
 		'Bedrooms',
 		'Bathrooms',
-		'Photos Count', 
+		'Pictures',
+		'Picture Count', 
 		'Interior Sqft',
 		'Lot size Sqft',
 		'Parking Garage', 

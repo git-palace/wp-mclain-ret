@@ -73,10 +73,29 @@ class Sandicor {
 		return $this->rets->Search( $filter, $class, $dmql );
 	}
 
+	// get pictures from sandicor
+	function getPicturesFromSandicor( $resource, $listingID, $json_format = false ) {
+		$results = [];
+
+		$objects = $this->rets->GetObject( $resource, 'Photo', $listingID, '*', 1 );
+
+		foreach ( $objects as $key => $obj) {
+			if ( $obj->isError() ) continue;
+			
+			array_push( $results, [
+				"url"	=> $obj->getLocation(),
+				"desc"	=> $obj->getContentDescription()
+			] );
+		}
+
+		return $json_format ? json_encode( $results ) : $results;
+	}
+
 	// auto populate database
-	function populateDB() {
-		if ( !$this->login() )
+	function populateDB( $force = false ) {
+		if ( !$this->login() ) {
 			return "failed to login";
+		}
 
 		ini_set('max_execution_time', 0);
 
@@ -87,7 +106,8 @@ class Sandicor {
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '$table_name'" ) != $table_name ) {
 			$charset_collate = $wpdb->get_charset_collate();
 
-			$sql = "CREATE TABLE $table_name (
+			$sql = "
+				CREATE TABLE $table_name (
 					ID bigint(20) NOT NULL AUTO_INCREMENT,
 					listing_ID varchar(10) NOT NULL, 
 					resource varchar(20) NOT NULL DEFAULT '',
@@ -111,7 +131,8 @@ class Sandicor {
 					parking_total varchar(10) NOT NULL DEFAULT '',
 					beds_num varchar(3) NOT NULL DEFAULT '',
 					baths_num varchar(5) NOT NULL DEFAULT '',
-					photo_count varchar(10) NOT NULL DEFAULT '',
+					pictures longtext NOT NULL DEFAULT '',
+					picture_count varchar(10) NOT NULL DEFAULT '',
 					year_built varchar(20) NOT NULL DEFAULT '',
 					inter_sqft varchar(10) NOT NULL DEFAULT '',
 					lotsize_sqft varchar(10) NOT NULL DEFAULT '',
@@ -135,6 +156,9 @@ class Sandicor {
 			delete_transient( "populating-db" );
 		}
 
+		if ( $force )
+			delete_transient( "populating-db" );
+
 		$listingIDs = [];
 		$populating = get_transient( "populating-db" );
 
@@ -155,6 +179,7 @@ class Sandicor {
 		);
 
 		foreach ( $filters as $resource => $filter ) {
+			var_dump( $filter );
 			foreach ( $filter['classes'] as $class ) {
 				$results = $this->getDataFromSandicor( $filter['resource'], $class );
 
@@ -165,6 +190,7 @@ class Sandicor {
 					if ( !in_array( $result['L_ListingID'], $listingIDs ) )
 						array_push( $listingIDs, $result['L_ListingID'] );
 
+					$result['L_Pictures'] = $this->getPicturesFromSandicor( $filter['resource'], $result['L_ListingID'], true );
 					$result['L_Resource'] = $resource;
 					$result['created_by'] = 'sandicor';
 					$this->addToLocalDB( $result );
@@ -194,19 +220,19 @@ class Sandicor {
 		$table_name = $wpdb->prefix . "sandicor_rets";
 
 		$default = array(
-			'listing_ID' 		=> $property['L_ListingID'],
-			'resource'			=> $property['L_Resource'],
-			'addr_num'			=> $property['L_AddressNumber'],
-			'addr_st'				=> $property['L_AddressStreet'],
-			'addr_2'				=> $property['L_Address2'],
-			'city'					=> $property['L_City'],
-			'state'					=> $property['L_State'],
-			'zip'						=> $property['L_Zip'],
-			'status'				=> $property['L_Status'],
+			'listing_ID' 	=> $property['L_ListingID'],
+			'resource'		=> $property['L_Resource'],
+			'addr_num'		=> $property['L_AddressNumber'],
+			'addr_st'		=> $property['L_AddressStreet'],
+			'addr_2'		=> $property['L_Address2'],
+			'city'			=> $property['L_City'],
+			'state'			=> $property['L_State'],
+			'zip'			=> $property['L_Zip'],
+			'status'		=> $property['L_Status'],
 			'system_price'	=> $property['L_SystemPrice'],
-			'inclusion'			=> '',
-			'created_at'		=> date('Y-m-d H:i:s'),
-			'created_by'		=> $property['created_by']
+			'inclusion'		=> '',
+			'created_at'	=> date('Y-m-d H:i:s'),
+			'created_by'	=> $property['created_by']
 		);
 
 		switch ( $property['L_Resource'] ) {
@@ -220,38 +246,43 @@ class Sandicor {
 					$address .= ' ' . $property['L_AddressStreet'];
 
 				$data = array_merge( $default, [
-					'address'				=> $address,
-					'area'					=> $property['L_Area'],
+					'address'			=> $address,
+					'area'				=> $property['L_Area'],
 					'list_price'		=> $property['L_AskingPrice'],
 					'low_price'			=> $property['L_asking_price_low'],
 					'supplement'		=> $property['LR_remarks66'],
-					'listing_date'	=> $property['L_ListingDate'],
-					'sr_type'				=> $property['L_SaleRent'],
-					'v_type'				=> $property['LFD_View_44'],
+					'listing_date'		=> $property['L_ListingDate'],
+					'sr_type'			=> $property['L_SaleRent'],
+					'v_type'			=> $property['LFD_View_44'],
 					'c_parking'			=> $property['LFD_ParkingGarage_22'],
 					'beds_num'			=> $property['LM_Int1_3'],
 					'baths_num'			=> $property['LM_Int2_6'],
-					'county'				=> $property['LM_Char10_1'],
-					'photo_count'		=> $property['L_PictureCount'],
+					'county'			=> $property['LM_Char10_1'],
+					'pictures'			=> $property['L_Pictures'],
+					'picture_count'		=> $property['L_PictureCount'],
 					'year_built'		=> $property['LM_Int2_1'],
 					'inter_sqft'		=> $property['LM_Int4_1'],
-					'lotsize_sqft'	=> $property['LM_Int4_6'],
-					'parking_total'	=> $property['LM_Int4_8'],
+					'lotsize_sqft'		=> $property['LM_Int4_6'],
+					'parking_total'		=> $property['LM_Int4_8'],
 					'sold_price'		=> $property['L_SoldPrice'],
-					'domls'					=> $property['L_DOMLS']
+					'domls'				=> $property['L_DOMLS']
 				] );
 				break;
 
 			case 'open_house':
 				$data = array_merge( $default, [
-					'address'					=> $property['L_Address'],
+					'address'			=> $property['L_Address'],
 					'start_datetime'	=> $property['OH_StartDateTime'],
 					'end_datetime'		=> $property['OH_EndDateTime'],
-					'class'						=> $property['L_Class']
+					'class'				=> $property['L_Class']
 				] );
 				break;
 		}
 
+		foreach ( $data as $key => $value ) {
+			if ( is_null( $value ) )
+				$data[$key] = '';
+		}
 
 		$old_properties = $wpdb->get_results( sprintf( "SELECT * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ), ARRAY_A );
 
@@ -265,39 +296,40 @@ class Sandicor {
 	// get table headers
 	function getExcludedHeaders( $resource = 'all', $excludes = [] ) {
 		$default = [
-			'listing_ID' 		=> 'Listing ID',
-			'resource'			=> 'Resource',
-			'address'				=> 'Address',
-			'addr_num'			=> 'Address Num',
-			'addr_st'				=> 'Address St',
-			'addr_2'				=> 'Address 2',
-			'city'					=> 'City',
-			'state'					=> 'State',
-			'zip'						=> 'zip',
-			'area'					=> 'Area ',
-			'county'				=> 'County',
-			'list_price'		=> 'List Price',
+			'listing_ID' 	=> 'Listing ID',
+			'resource'		=> 'Resource',
+			'address'		=> 'Address',
+			'addr_num'		=> 'Address Num',
+			'addr_st'		=> 'Address St',
+			'addr_2'		=> 'Address 2',
+			'city'			=> 'City',
+			'state'			=> 'State',
+			'zip'			=> 'zip',
+			'area'			=> 'Area ',
+			'county'		=> 'County',
+			'list_price'	=> 'List Price',
 			'system_price'	=> 'System Price',
-			'sold_price'		=> 'Sold Price',
-			'low_price'			=> 'Low Price',
-			'supplement'		=> 'Supplement',
-			'sr_type'				=> 'For Sale / Rent',
-			'v_type'				=> 'View Type',
-			'c_parking'			=> 'Parking Garage',
+			'sold_price'	=> 'Sold Price',
+			'low_price'		=> 'Low Price',
+			'supplement'	=> 'Supplement',
+			'sr_type'		=> 'For Sale / Rent',
+			'v_type'		=> 'View Type',
+			'c_parking'		=> 'Parking Garage',
 			'parking_total'	=> 'Parking Total',
-			'beds_num'			=> 'Bedrooms',
-			'baths_num'			=> 'Bathrooms',
-			'photo_count'		=> 'Photos Count',
-			'year_built'		=> 'Year Built',
-			'inter_sqft'		=> 'Interior Sqft',
+			'beds_num'		=> 'Bedrooms',
+			'baths_num'		=> 'Bathrooms',
+			'pictures'		=> 'Pictures',
+			'picture_count'	=> 'Picture Count',
+			'year_built'	=> 'Year Built',
+			'inter_sqft'	=> 'Interior Sqft',
 			'lotsize_sqft'	=> 'Lot size Sqft',
-			'domls'					=> 'Days on Market',
-			'inclusion'			=> 'Inclusions',
-			'start_datetime'	=> 'Start Datetime',
-			'end_datetime'		=> 'End Datetime',
-			'class'					=> 'Class',
+			'domls'			=> 'Days on Market',
+			'inclusion'		=> 'Inclusions',
+			'start_datetime'=> 'Start Datetime',
+			'end_datetime'	=> 'End Datetime',
+			'class'			=> 'Class',
 			'listing_date'	=> 'Listing Date',
-			'status'				=> 'Status'
+			'status'		=> 'Status'
 		];
 
 		$headers = [];

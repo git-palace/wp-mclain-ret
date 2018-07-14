@@ -5,6 +5,7 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 });
 */
 (function($) {
+	// submit configuration form
 	$("form#sandicor-config").submit(function(e) {
 		e.preventDefault();
 
@@ -27,12 +28,14 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 		})
 	});
 
+	// pagination
 	$("select.per-page").change(function() {
 		var resource = $(this).attr("type");
 		if (resource == 'property')
 			window.location.href = "/wp-admin/admin.php?page=sandicor&perPage=" + $(this).val();
 	});
 
+	// single-property update form
 	$("form#sandicor-update").submit(function(e) {
 		e.preventDefault();
 
@@ -52,5 +55,15 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 					alert("there's problem to add/update new query.")
 			}
 		})
+	});
+
+	// remove picture
+	$(".remove-picture").click(function() {
+		$(this).parent("li.picture").css('-webkit-animation', 'fadeOut 500ms');
+
+		$(this).parent("li.picture").bind('webkitAnimationEnd',function() {
+			console.log("A dfadfadf");
+			$(this).remove();
+		});
 	});
 })(jQuery);

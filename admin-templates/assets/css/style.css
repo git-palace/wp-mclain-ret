@@ -1,15 +1,117 @@
+@-moz-keyframes fadeIn {
+	from {opacity:0;}
+	to {opacity:1;}
+}
+
+@-webkit-keyframes fadeIn {
+	from {opacity:0;}
+	to {opacity:1;}
+}
+
+@keyframes fadeIn {
+	from {opacity:0;}
+	to {opacity:1;}
+}
+@-moz-keyframes fadeOut {
+	from {opacity:1;}
+	to {opacity:0;}
+}
+
+@-webkit-keyframes fadeOut {
+	from {opacity:1;}
+	to {opacity:0;}
+}
+@keyframes fadeOut {
+	from {opacity:1;}
+	to {opacity:0;}
+}
+
+.d-none {
+	display: none;
+}
+
+.d-flex {
+	display: flex;
+}
+
+.flex-wrap {
+	flex-wrap: wrap;
+}
+
+.flex-column {
+	flex-direction: column;
+}
+
+.align-items-center {
+	align-items: center;;
+}
+
 .wp-header-end {
 	margin: 4px 0;
+}
+
+.valign-middle {
+	vertical-align: middle;
+}
+
+.text-center {
+	text-align: center;
+}
+
+.m-auto {
+	margin: auto;
+}
+
+.mx-auto,
+.ml-auto {
+	margin-left: auto;
+}
+
+.mx-auto,
+.mr-auto {
+	margin-right: auto;
+}
+
+.my-auto,
+.mt-auto {
+	margin-top: auto;
+}
+
+.my-auto,
+.mb-auto {
+	margin-bottom: auto;
 }
 
 #adminmenu a[href="admin.php?page=sandicor-single-property"] {
 	display: none;
 }
 
-td[valign="middle"] {
-	vertical-align: middle;
+#property_pictures li {
+	flex: 0 0 20%;
+	max-width: 20%;
+	padding: 6px;
+	box-sizing: border-box;
+	position: relative;
+	-webkit-animation: fadeIn 500ms;
+	-moz-animation: fadeIn 500ms;
+	animation: fadeIn 500ms;
 }
 
-th[align="center"] {
-	text-align: center;
+.img-fluid {
+	max-width: 100%;
+}
+
+.remove-picture {
+	position: absolute;
+	right: 10px;
+	top: 10px;
+	cursor: pointer;
+	font-size: 25px;
+	width: 25px;
+	height: 25px;
+	line-height: 25px;
+}
+
+#property_pictures li:hover .remove-picture {
+	display: flex;
 }

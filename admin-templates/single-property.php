@@ -20,7 +20,7 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 
 		<table class="form-table">
 			<tbody>
-				<?php foreach ( $fields as $key => $field) : ?>
+				<?php foreach ( $fields as $key => $field) : if ( $key == 'picture_count' ) continue;?>
 					<tr>
 						<th scope="row">
 							<label for="<?php _e( $key ); ?>">
@@ -67,6 +67,24 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 										<option value="<?php _e( $txt ); ?>" <?php _e( getValidatedValue( $sandicor, $key ) == $txt ? 'selected' : '' ) ?>><?php _e( $txt ); ?></option>
 									<?php endforeach ?>
 								</select>
+								
+							<?php elseif ( $key == 'pictures' ): ?>
+								<ul id="property_pictures" class="d-flex flex-wrap">
+
+									<?php foreach( json_decode( getValidatedValue( $sandicor, $key ) ) as $idx => $picture ) : ?>
+
+										<li class="picture d-flex flex-column">
+											<a class="remove-picture d-none text-center"><span class="m-auto">&times;</span></a>
+											<img class="img-fluid" src="<?php _e( $picture->url ); ?>" />
+											<div class="summary d-flex align-items-center">
+												<label class="mr-auto" for="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>]">Description : </label>
+												<input class="ml-auto" type="text" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>]" value="<?php _e( $picture->desc ); ?>" />
+											</div>
+										</li>
+
+									<?php endforeach; ?>
+
+								</ul>
 
 							<?php else: ?>
 
