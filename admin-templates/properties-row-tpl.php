@@ -9,7 +9,7 @@
 					case 'sold_price':
 					case 'low_price':
 						if ( !empty( $result->$key ) )
-							_e( '$ ' . number_format( floatval( $result->$key ), 2 ) );
+							_e( '$' . number_format( floatval( $result->$key )) );
 						break;
 					
 					default:

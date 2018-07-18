@@ -19,7 +19,7 @@ class SandicorConfig {
 
 		$rets = new \PHRETS\Session($config);
 
-		return ["rets" => $rets, "brelicense" => self::getBRELicense()];
+		return ["rets" => $rets, "brelicense" => self::getBRELicense(), "google_api_key" => self::getGoogleAPIKey()];
 	}
 
 	public static function getLoginURL() {
@@ -44,6 +44,12 @@ class SandicorConfig {
 		$config = get_option( 'sandicor_config', false );
 
 		return $config ? $config["brelicense"] : false;		
+	}
+
+	public static function getGoogleAPIKey() {
+		$config = get_option( 'sandicor_config', false );
+
+		return $config ? $config['google_api_key'] : false;
 	}
 
 	public static function getAutoSave() {

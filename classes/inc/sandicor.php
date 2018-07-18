@@ -5,6 +5,7 @@ class Sandicor {
 	private $properties;
 	private $openhouses;
 	private $brelicense;
+	private $google_api_key;
 
 	// constructor
 	private function __construct() {
@@ -12,6 +13,7 @@ class Sandicor {
 			$config = SandicorConfig::setConfiguration();
 			$this->rets = $config["rets"];
 			$this->brelicense = $config["brelicense"];
+			$this->google_api_key = $config["google_api_key"];
 		}
 	}
 
@@ -326,7 +328,7 @@ class Sandicor {
 			'inter_sqft'	=> 'Interior Sqft',
 			'lotsize_sqft'	=> 'Lot size Sqft',
 			'domls'			=> 'Days on Market',
-			'inclusions'		=> 'Inclusions',
+			'inclusions'	=> 'Inclusions',
 			'start_datetime'=> 'Start Datetime',
 			'end_datetime'	=> 'End Datetime',
 			'class'			=> 'Class',
@@ -490,5 +492,9 @@ class Sandicor {
 			'SOLD'	=> 'SOLD',
 			'WITH'	=> 'WITHDRAWN'
 		];
+	}
+
+	function getGoogleAPIKey() {
+		return $this->google_api_key;
 	}
 }

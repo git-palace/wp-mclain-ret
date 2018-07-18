@@ -34,6 +34,13 @@
 					<p>Will run now and schedule it.</p>
 				</td>
 			</tr>
+			
+			<tr>
+				<th scope="row"><label for="google_api_key">Google API Key:</label></th>
+				<td>
+					<input name="google_api_key" type="text" id="google_api_key" class="regular-text" value="<?php echo SandicorConfig::getGoogleAPIKey(); ?>">
+				</td>
+			</tr>
 		</tbody>
 	</table>
 

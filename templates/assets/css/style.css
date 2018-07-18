@@ -87,3 +87,89 @@ input[type="text"].ssf-input,
 }
 
 /* slide in single property */
+
+/* listing detail section in single property */
+.listing-details {
+	background-color: #f1f0ed;
+	padding: 5em 0;
+	font-size: 1.2em;
+}
+
+.listing-details h1 {
+	font-weight: lighter;
+	margin-bottom: 40px;
+}
+
+.listing-details p.supplement {
+	font-size: 1.2em;
+}
+
+.listing-details tr:nth-of-type(even) {
+	background-color: #fff;
+}
+
+.listing-details .table > tbody > tr:first-child > td {
+	border-top-width: 0;
+}
+
+.listing-details .table > tbody > tr > td {
+	padding: 1.5rem 0;
+}
+
+.listing-details .table > tbody > tr > td:nth-child(2) {
+	text-align: right;
+}
+
+.listing-details .table-container {
+	background: #fff;
+	box-shadow: 0 4px 20px 0 rgba(48,38,35,.26);
+	padding: 6rem 3rem 3rem;
+	position: relative;
+	margin: 35px 0 30px;
+}
+
+.listing-details .table-container .house-icon {
+	position: absolute;
+	left: 50%;
+	transform: translateX(-50%);
+	top: -35px;
+	height: 70px;
+	width: 70px;
+	background-color: #182a83;
+	box-shadow: 0 4px 20px 0 rgba(48,38,35,.26);
+	color: #fff;
+	border-radius: 50%;
+	display: flex;
+	align-items: center;
+}
+
+.listing-details .table-container .house-icon img {
+	margin: auto;
+}
+/* listing detail section in single property */
+
+/* listing map section in single propert */
+.listing-map {
+	padding: 5em 0;
+}
+
+.listing-map .visit {
+	width: 100%;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	margin-top: 3rem;
+	background-color: #182a83;
+	color: #fff;
+	border-color: #132061;
+	border-radius: 0;
+	padding: 1em;
+	text-align: center;
+	font-size: 1.2em;
+	text-transform: uppercase;
+}
+
+.listing-map .visit:hover {
+	background-color: #132169;
+}
+/* listing map section in single propert */

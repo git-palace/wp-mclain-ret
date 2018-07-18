@@ -30,14 +30,16 @@ add_action( 'rest_api_init', function () {
 					isset( $_POST["username"] ) && !empty( $_POST["username"] ) &&
 					isset( $_POST["password"] ) && !empty( $_POST["password"] ) &&
 					isset( $_POST["brelicense"] ) && !empty( $_POST["brelicense"] ) &&
+					isset( $_POST["google_api_key"] ) && !empty( $_POST["google_api_key"] ) &&
 					class_exists( "SandicorConfig" )
 				) {
 					return SandicorConfig::saveConfig( array(
-						"login_url" => $_POST["login_url"],
-						"username"	=> $_POST["username"],
-						"password"	=> $_POST["password"],
-						"brelicense" => $_POST["brelicense"],
-						"autosave"	=> $_POST["autosave"] 
+						"login_url" 	=> $_POST["login_url"],
+						"username"		=> $_POST["username"],
+						"password"		=> $_POST["password"],
+						"brelicense"	=> $_POST["brelicense"],
+						"autosave"		=> $_POST["autosave"],
+						"google_api_key" => $_POST["google_api_key"]
 					) );
 				}
 
