@@ -5,7 +5,7 @@ if ( isset( $_GET['action'] ) && $_GET['action'] == 'edit' && isset( $_GET['id']
 	$sandicor = SI()->getDataFromLocalDB( ['perPage' => 1, 'pageIdx' => 1], ['id' => $_GET['id']] );
 	$sandicor = count( $sandicor ) ? $sandicor[0] : $sandicor;
 }
-$fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusions', 'Photos Count'] );
+$fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Photos Count'] );
 ?>
 
 <div class="wrap">
@@ -86,6 +86,9 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Inclusi
 									<?php endforeach; ?>
 
 								</ul>
+
+							<?php elseif ( $key == 'inclusions' ): ?>
+								<textarea class="large-text code" rows="3"><?php _e( getValidatedValue( $sandicor, $key ) ); ?></textarea>
 
 							<?php else: ?>
 

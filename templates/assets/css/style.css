@@ -23,3 +23,67 @@ input[type="text"].ssf-input,
 	color: #fff;
 	background-color: #101f6d;
 }
+
+/* header in single property */
+.listing-summary {
+	padding-top: 5em;
+}
+
+.listing-summary span {
+	font-size: 1.25em;
+	display: block;
+}
+
+.listing-summary .county {
+	color: #182a83;
+}
+
+.listing-summary h1 {
+	margin-top: 10px;
+}
+
+.listing-summary .address {
+	font-weight: lighter;
+}
+
+.listing-summary .status {
+	background-color: #182a83;
+	margin: 2em 0;
+	background-color: #182a83;
+	padding: 0 15px;
+}
+
+.listing-summary .status span {
+	font-size: 1em;
+	color: #fff;
+}
+/* header in single property */
+
+/* slide in single property */
+
+.property-slide {
+	cursor: pointer;
+	overflow-x: hidden;
+	max-width: 100%;
+	margin: 3em 0 5em;
+}
+
+.property-slide .slick-slide {
+	position: relative;
+	transform: scale(.95);
+	transition: all .25s ease;
+	padding: 0 20px;
+}
+
+.property-slide .slick-slide.slick-current {
+	transform: scale(1.1);
+}
+
+.property-slide .slick-slide .img {
+	height: 450px;
+	background-size: contain;
+	background-position: center;
+	background-repeat: no-repeat;
+}
+
+/* slide in single property */

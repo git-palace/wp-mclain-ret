@@ -24,6 +24,6 @@
 		<span>&nbsp;|&nbsp;</span>
 		<a href="/wp-admin/admin.php?page=sandicor&action=delete&id=<?php _e( $result->ID ); ?>">Delete</a>
 		<span>&nbsp;|&nbsp;</span>
-		<a href="/wp-admin/admin.php?page=sandicor-single-property&id=<?php _e( $result->ID ); ?>&action=details">View</a>
+		<a href="/single-property/<?php _e( $result->listingID ); ?>" target="_blank">View</a>
 	</td>
 </tr>

@@ -1,7 +1,7 @@
 <?php
 /*
 ID 					=> table unique id
-listing_ID	=> L_ListingID
+listingID	=> L_ListingID
 area  			=> L_Area
 addr_num		=> L_AddressNumber
 addr_st 		=> L_AddressStreet

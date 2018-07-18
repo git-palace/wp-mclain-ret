@@ -34,6 +34,8 @@ class Sandicor {
 		}
 	}
 
+	// get table name
+
 	// get Resource Classes
 	function getResourceClasses( $resource = "property" ) {
 		switch ( $resource ) {
@@ -109,7 +111,7 @@ class Sandicor {
 			$sql = "
 				CREATE TABLE $table_name (
 					ID bigint(20) NOT NULL AUTO_INCREMENT,
-					listing_ID varchar(10) NOT NULL, 
+					listingID varchar(10) NOT NULL, 
 					resource varchar(20) NOT NULL DEFAULT '',
 					address varchar(200) NOT NULL DEFAULT '',	
 					addr_num varchar(15) NOT NULL DEFAULT '',
@@ -118,16 +120,16 @@ class Sandicor {
 					city varchar(50) NOT NULL DEFAULT '',
 					state varchar(2) NOT NULL DEFAULT '',
 					zip varchar(20) NOT NULL DEFAULT '',
-					area varchar(20) NOT NULL DEFAULT '',
+					area varchar(50) NOT NULL DEFAULT '',
 					county  varchar(10) NOT NULL DEFAULT '',
 					list_price varchar(10) NOT NULL DEFAULT '',
 					system_price varchar(10) NOT NULL DEFAULT '',
 					sold_price varchar(10) NOT NULL DEFAULT '',
 					low_price varchar(10) NOT NULL DEFAULT '',
-					supplement text NOT NULL DEFAULT '',
+					supplement longtext NOT NULL DEFAULT '',
 					sr_type varchar(20) NOT NULL DEFAULT '',
 					v_type varchar(20) NOT NULL DEFAULT '',
-					c_parking varchar(10) NOT NULL DEFAULT '',
+					c_parking varchar(50) NOT NULL DEFAULT '',
 					parking_total varchar(10) NOT NULL DEFAULT '',
 					beds_num varchar(3) NOT NULL DEFAULT '',
 					baths_num varchar(5) NOT NULL DEFAULT '',
@@ -137,16 +139,16 @@ class Sandicor {
 					inter_sqft varchar(10) NOT NULL DEFAULT '',
 					lotsize_sqft varchar(10) NOT NULL DEFAULT '',
 					domls varchar(10) NOT NULL DEFAULT '',
-					inclusion varchar(10) NOT NULL DEFAULT '',
+					inclusions longtext NOT NULL DEFAULT '',
 					start_datetime varchar(20) NOT NULL DEFAULT '',
 					end_datetime varchar(20) NOT NULL DEFAULT '',
-					class varchar(20) NOT NULL DEFAULT '',
+					class varchar(50) NOT NULL DEFAULT '',
 					listing_date varchar(20) NOT NULL DEFAULT '',
 					status varchar(20) NOT NULL DEFAULT '',
 					created_by varchar(20) NOT NULL DEFAULT '',
 					created_at varchar(20) NOT NULL DEFAULT '',
 					PRIMARY KEY  (ID),
-					UNIQUE KEY `listing_ID` (`listing_ID`)
+					UNIQUE KEY `listingID` (`listingID`)
 				) $charset_collate;
 			";
 
@@ -179,7 +181,6 @@ class Sandicor {
 		);
 
 		foreach ( $filters as $resource => $filter ) {
-			var_dump( $filter );
 			foreach ( $filter['classes'] as $class ) {
 				$results = $this->getDataFromSandicor( $filter['resource'], $class );
 
@@ -210,8 +211,8 @@ class Sandicor {
 
 		if ( isset( $where['id'] ) && !empty( $where['id'] ) )
 			$wpdb->delete( $table_name, array( 'id' => $where['id'] ) );
-		elseif( isset( $where['listing_ID'] ) && !empty( $where['listing_ID'] ) )
-			$wpdb->delete( $table_name, array( 'listing_ID' => $where['listing_ID'] ) );
+		elseif( isset( $where['listingID'] ) && !empty( $where['listingID'] ) )
+			$wpdb->delete( $table_name, array( 'listingID' => $where['listingID'] ) );
 	}
 
 	// add to database
@@ -220,7 +221,7 @@ class Sandicor {
 		$table_name = $wpdb->prefix . "sandicor_rets";
 
 		$default = array(
-			'listing_ID' 	=> $property['L_ListingID'],
+			'listingID' 	=> $property['L_ListingID'],
 			'resource'		=> $property['L_Resource'],
 			'addr_num'		=> $property['L_AddressNumber'],
 			'addr_st'		=> $property['L_AddressStreet'],
@@ -230,7 +231,6 @@ class Sandicor {
 			'zip'			=> $property['L_Zip'],
 			'status'		=> $property['L_Status'],
 			'system_price'	=> $property['L_SystemPrice'],
-			'inclusion'		=> '',
 			'created_at'	=> date('Y-m-d H:i:s'),
 			'created_by'	=> $property['created_by']
 		);
@@ -246,26 +246,27 @@ class Sandicor {
 					$address .= ' ' . $property['L_AddressStreet'];
 
 				$data = array_merge( $default, [
-					'address'			=> $address,
-					'area'				=> $property['L_Area'],
-					'list_price'		=> $property['L_AskingPrice'],
-					'low_price'			=> $property['L_asking_price_low'],
-					'supplement'		=> $property['LR_remarks66'],
-					'listing_date'		=> $property['L_ListingDate'],
-					'sr_type'			=> $property['L_SaleRent'],
-					'v_type'			=> $property['LFD_View_44'],
-					'c_parking'			=> $property['LFD_ParkingGarage_22'],
-					'beds_num'			=> $property['LM_Int1_3'],
-					'baths_num'			=> $property['LM_Int2_6'],
-					'county'			=> $property['LM_Char10_1'],
-					'pictures'			=> $property['L_Pictures'],
-					'picture_count'		=> $property['L_PictureCount'],
-					'year_built'		=> $property['LM_Int2_1'],
-					'inter_sqft'		=> $property['LM_Int4_1'],
-					'lotsize_sqft'		=> $property['LM_Int4_6'],
-					'parking_total'		=> $property['LM_Int4_8'],
-					'sold_price'		=> $property['L_SoldPrice'],
-					'domls'				=> $property['L_DOMLS']
+					'address'		=> $address,
+					'area'			=> $property['L_Area'],
+					'list_price'	=> $property['L_AskingPrice'],
+					'low_price'		=> $property['L_asking_price_low'],
+					'supplement'	=> $property['LR_remarks66'],
+					'listing_date'	=> $property['L_ListingDate'],
+					'sr_type'		=> $property['L_SaleRent'],
+					'v_type'		=> $property['LFD_View_44'],
+					'c_parking'		=> $property['LFD_ParkingGarage_22'],
+					'beds_num'		=> $property['LM_Int1_3'],
+					'baths_num'		=> $property['LM_Int2_6'],
+					'county'		=> $property['LM_Char10_1'],
+					'pictures'		=> $property['L_Pictures'],
+					'picture_count'	=> $property['L_PictureCount'],
+					'year_built'	=> $property['LM_Int2_1'],
+					'inter_sqft'	=> $property['LM_Int4_1'],
+					'lotsize_sqft'	=> $property['LM_Int4_6'],
+					'parking_total'	=> $property['LM_Int4_8'],
+					'sold_price'	=> $property['L_SoldPrice'],
+					'domls'			=> $property['L_DOMLS'],
+					'inclusions'		=> $property['LFD_HomeOwnersFeeIncludes_13'],
 				] );
 				break;
 
@@ -284,19 +285,20 @@ class Sandicor {
 				$data[$key] = '';
 		}
 
-		$old_properties = $wpdb->get_results( sprintf( "SELECT * FROM `%s` WHERE `listing_ID` = '%s'", $table_name, $property['L_ListingID'] ), ARRAY_A );
+		$sql = sprintf( "SELECT * FROM `%s` WHERE `listingID` = '%s'", $table_name, $property['L_ListingID'] );
+		$old_properties = $wpdb->get_results( $sql, ARRAY_A );
 
 		if ( count( $old_properties ) ){
-			$wpdb->update( $table_name, $data, array( 'listing_ID' => $property['L_ListingID'] ) );
+			$wp_success = $wpdb->update( $table_name, $data, array( 'listingID' => $property['L_ListingID'] ) );
 		}	else {
-			$wpdb->insert( $table_name, $data );
+			$wp_success = $wpdb->insert( $table_name, $data );
 		}
 	}
 
 	// get table headers
 	function getExcludedHeaders( $resource = 'all', $excludes = [] ) {
 		$default = [
-			'listing_ID' 	=> 'Listing ID',
+			'listingID' 	=> 'Listing ID',
 			'resource'		=> 'Resource',
 			'address'		=> 'Address',
 			'addr_num'		=> 'Address Num',
@@ -324,7 +326,7 @@ class Sandicor {
 			'inter_sqft'	=> 'Interior Sqft',
 			'lotsize_sqft'	=> 'Lot size Sqft',
 			'domls'			=> 'Days on Market',
-			'inclusion'		=> 'Inclusions',
+			'inclusions'		=> 'Inclusions',
 			'start_datetime'=> 'Start Datetime',
 			'end_datetime'	=> 'End Datetime',
 			'class'			=> 'Class',
@@ -354,8 +356,7 @@ class Sandicor {
 	function getDataFromLocalDB( $limits = ['perPage' => 10, 'pageIdx' => 1], $where = [] ) {
 		global $wpdb;
 		
-		$table_name = $wpdb->prefix."sandicor_rets";
-		$sql = sprintf( "SELECT * FROM `%s` WHERE", $table_name );
+		$sql = sprintf( "SELECT * FROM `%s` WHERE", $wpdb->prefix . "sandicor_rets" );
 
 		if ( !count( $where ) ) {
 			$sql .= " 1";
@@ -378,12 +379,24 @@ class Sandicor {
 		return $wpdb->get_results( $sql, OBJECT );
 	}
 
+	function getDataBylistingID( $listingID = -1 ) {
+		global $wpdb;
+
+		$sql = sprintf( "SELECT * FROM `%s` WHERE `listingID` = '%s'", $wpdb->prefix . "sandicor_rets", $listingID );
+
+		$results = $wpdb->get_results( $sql, OBJECT );
+
+		if ( count( $results ) )
+			return $results[0];
+
+		return false;
+	}
+
 	// get total number by resource
 	function getTotalCountByResource( $resource ) {
 		global $wpdb;
-		$table_name = $wpdb->prefix."sandicor_rets";
 
-		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `resource` = '%s'", $table_name, $resource ) );
+		$count = $wpdb->get_var( sprintf( "SELECT COUNT(*) FROM `%s` WHERE `resource` = '%s'", $wpdb->prefix . "sandicor_rets", $resource ) );
 
 		return $count;
 	}

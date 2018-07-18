@@ -1,7 +1,5 @@
 <?php
 
-// wp_schedule_single_event( time() + 60, "sandicor_cronjob" );
-
 $headers = SI()->getExcludedHeaders( 
 	'property',
 	[

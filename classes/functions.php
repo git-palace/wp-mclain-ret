@@ -101,7 +101,7 @@ add_action( 'sandicor_cronjob', function() {
 
 function getPlaceholder( $field ) {
 	switch ( $field ) {
-		case 'listing_ID':
+		case 'listingID':
 			return '12345678';
 
 		case 'addr_num':
@@ -182,7 +182,7 @@ function addNewRecordtoLocalDB() {
 	}
 
 	$sandicor = [
-		'L_ListingID' 		=> getValidatedValue( $property, 'listing_ID' ),
+		'L_ListingID' 		=> getValidatedValue( $property, 'listingID' ),
 		'L_Resource'		=> getValidatedValue( $property, 'resource' ),
 		'L_AddressNumber'	=> getValidatedValue( $property, 'addr_num' ),
 		'L_AddressStreet'	=> getValidatedValue( $property, 'addr_st' ),
@@ -212,6 +212,7 @@ function addNewRecordtoLocalDB() {
 		'LM_Int4_8'			=> getValidatedValue( $property, 'parking_total' ),
 		'L_SoldPrice'		=> getValidatedValue( $property, 'sold_price' ),
 		'L_DOMLS'			=> getValidatedValue( $property, 'domls' ),
+		'LFD_HomeOwnersFeeIncludes_13'	=> getValidatedValue( $property, 'inclusions' ),
 		'L_Address'			=> getValidatedValue( $property, 'address' ),
 		'OH_StartDateTime'	=> getValidatedValue( $property, 'start_datetime' ),
 		'OH_EndDateTime'	=> getValidatedValue( $property, 'end_datetime' ),
