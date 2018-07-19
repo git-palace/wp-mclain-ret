@@ -371,11 +371,9 @@ class Sandicor {
 				$sql .= sprintf( " `%s` = '%s' AND", $field, $value );
 		}
 
-		if (
-			isset( $limits['perPage'] ) && !empty( $limits['perPage'] ) &&
-			isset( $limits['pageIdx'] ) && !empty( $limits['pageIdx'] )
-		) {
-			$sql .= sprintf( " LIMIT %d, %d", ( intval( $limits['pageIdx'] ) - 1 ) * $limits['perPage'], $limits['perPage'] );
+		if ( isset( $limits['perPage'] ) && !empty( $limits['perPage'] ) ) {
+			if ( $limits['perPage'] !== 'all' && isset( $limits['pageIdx'] ) && !empty( $limits['pageIdx'] ))
+				$sql .= sprintf( " LIMIT %d, %d", ( intval( $limits['pageIdx'] ) - 1 ) * $limits['perPage'], $limits['perPage'] );
 		}
 
 		return $wpdb->get_results( $sql, OBJECT );

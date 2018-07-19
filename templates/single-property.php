@@ -1,5 +1,3 @@
-<script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
-
 <section class="listing-summary">
 	<div class="container">
 		<div class="row">
@@ -59,6 +57,7 @@
 				</span>
 
 				<table class="table table-condensed">
+
 					<tbody>
 						<tr>
 							<td>Price :</td>
@@ -120,12 +119,9 @@
 <section class="listing-map">
 	<div class="container">
 		<div class="row">
-			<div class="col-md-6">
-				<iframe
-				  width ="100%"
-				  height="350"
-				  frameborder="0" style="border:0"
-				  src="https://www.google.com/maps/embed/v1/place?key=<?php _e( SI()->getGoogleAPIKey() ); ?>&q=US+<?php _e( str_replace( ' ', '+', getValidatedValue( $property, 'area') )) ?>" allowfullscreen>
+			<div class="col-md-6 property">
+				<?php $loc = convertAddress2Lat_Lng( getValidatedValue( $property, 'address' ), SI()->getGoogleAPIKey() ); ?>
+				<iframe width ="100%" height="350" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?key=<?php _e( SI()->getGoogleAPIKey() ); ?>&q=US+<?php _e( str_replace( ' ', '+', getValidatedValue( $property, 'area') )) ?><?php //_e( $loc ? '&center=' . $loc->lat . ', ' . $loc->lng : '' ); ?>&zoom=13" allowfullscreen>
 				</iframe>
 			</div>
 
@@ -140,5 +136,35 @@
 
 <section class="listing-nearby">
 	<div class="container">
+		<h1 class="col-xs-12">Nearby Properties</h1>
+
+		<div class="row">
+			<?php $near_listings = getListingsNearby( $property, $loc ); ?>
+
+
+			<?php foreach ( $near_listings as $s_listing ) : ?>
+				
+				<div class="property col-sm-6 col-md-4">
+					<a href="/single-property/<?php _e( getValidatedValue( $s_listing, 'listingID' ) ); ?>" >
+						<div class="thumbnail">
+							<?php
+								$pictures = json_decode( $s_listing->pictures, true ); 
+							?>
+							<?php if ( count( $pictures ) ) : ?>
+								<img src="<?php _e( $pictures[0]['url'] ) ?>">
+							<?php else: ?>
+								<span class="no-image">No Image</span>
+							<?php endif; ?>
+						</div>
+
+						<div class="summary">
+							<p class="address"><?php _e( getValidatedValue( $s_listing, 'address' ) ); ?></p>
+							<p class="price"><?php _e( '$' . number_format( floatval( getValidatedValue( $s_listing, 'list_price', 0 ) ) ) ); ?></p>
+						</div>
+					</a>
+				</div>
+
+			<?php endforeach; ?>
+		</div>
 	</div>
 </section>

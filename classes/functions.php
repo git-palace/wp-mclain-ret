@@ -226,3 +226,44 @@ function addNewRecordtoLocalDB() {
 
 	return $sandicor;
 }
+
+function convertAddress2Lat_Lng( $address, $apiKey ) {
+	$url = sprintf( "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", str_replace( ' ', '+', $address ), $apiKey );
+	$response = json_decode( wp_remote_get( $url )['body'] );
+
+	if( $response->status == "OK" && isset( $response->results[0] ))
+		return $response->results[0]->geometry->location;
+	else
+		return false;
+}
+
+function getListingsNearby( $property, $lat_lng = [], $limit = 3 ) {
+	$results = SI()->getDataFromLocalDB( [
+		'perPage'	=>	'all'
+	], [
+		'city'		=>	getValidatedValue( $property, 'city' ),
+		'resource'	=>	getValidatedValue( $property, 'resource' )
+	] );
+
+	$results = json_decode( json_encode( $results ), true );
+
+	foreach ( $results as $key => $result ) {
+		if ( $property->listingID == $result['listingID'] ) {
+			unset( $results[$key] );
+		} else {
+			$r_lat_lng = convertAddress2Lat_Lng( getValidatedValue( $result, 'address' ), SI()->getGoogleAPIKey() );
+			
+			if ( $r_lat_lng) {
+				$results[$key]['distance'] = sqrt( pow( abs( $lat_lng->lat - $r_lat_lng->lat ), 2 ) + pow( abs( $lat_lng->lng - $r_lat_lng->lng ), 2) );
+			} else {
+				unset( $results[$key] );				
+			}
+		}
+	}
+
+	usort( $results, function( $a, $b ) {
+		return $a['distance'] > $b['distance'];
+	} );
+
+	return json_decode( json_encode ( array_slice( $results, 0, 3 ) ) );
+}
