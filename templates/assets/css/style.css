@@ -199,6 +199,11 @@ input[type="text"].ssf-input,
 	display: flex;
 }
 
+.listing-nearby .thumbnail .no-image {
+    margin: auto;
+    font-size: 2em;
+}
+
 .listing-nearby a:hover .thumbnail:after {
 	background-color: rgba(0, 0, 0, 0);
 }
