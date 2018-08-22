@@ -82,7 +82,7 @@
 	margin-bottom: auto;
 }
 
-#adminmenu a[href="admin.php?page=sandicor-single-property"] {
+#adminmenu a[href="admin.php?page=add-sandicor"] {
 	display: none;
 }
 

@@ -22,35 +22,62 @@ add_action( 'wp_enqueue_scripts', function() {
 	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__ ), array( 'slick' ), '1.8.1', true );
 });
 
-
 // add single property page in front end
 add_filter( 'generate_rewrite_rules', function ( $wp_rewrite ) {
 	$wp_rewrite->rules = array_merge(
-		['single-property/(\d+)/?$' => 'index.php?listingID=$matches[1]'],
+		[
+			'single-property/(\d+)/?$' => 'index.php?spType=single&listingID=$matches[1]',
+			'search-results/([a-zA-Z0-9 ,_]+)/?$' => 'index.php?spType=search&keyword=$matches[1]'
+		],
 		$wp_rewrite->rules
 	);
+
+	return $wp_rewrite->rules;
 } );
 
 add_filter( 'query_vars', function( $query_vars ) {
-	$query_vars[] = 'listingID';
+	array_push( $query_vars, 'listingID', 'keyword', 'spType');
+
 	return $query_vars;
 } );
 
 add_action( 'template_redirect', function() {
-	$listingID = intval( get_query_var( 'listingID' ) );
-	if ( $listingID ) {
-		get_header();
+	if ( !function_exists( 'SI' ) )
+		die;
 
-		if ( function_exists( 'SI' ) ) {
+	$spType = get_query_var('spType');
+
+	get_header();
+
+	switch ( $spType ) {
+		case 'single':
+			$listingID = intval( get_query_var( 'listingID' ) );
+
 			$property = SI()->getDataBylistingID( $listingID );
 
 			if ( $property)
 				include "single-property.php";
 			else
 				echo "<h1>Invalid Listing ID</h1>";
-		}
+			break;
+		
+		case 'search':
+			$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
 
-		get_footer();
-		die;
+			$properties = SI()->getDataByKeyWord( $keywords );
+			
+			/*echo '<pre>';
+			print_r( $properties ) ;
+			echo '</pre>';*/
+
+			if ( count( $properties ) )
+				include "search-results.php";
+			else
+				echo "<h1>No Results</h1>";
+			break;
 	}
+
+	get_footer();
+
+	die;
 } );

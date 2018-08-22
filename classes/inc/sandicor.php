@@ -492,7 +492,56 @@ class Sandicor {
 		];
 	}
 
+	// get google api key
 	function getGoogleAPIKey() {
 		return $this->google_api_key;
+	}
+
+	// get data by key word
+	function getDataByKeyWord( $keywords = []) {
+		$all = $this->getDataFromLocalDB( [] );
+
+		$matches = [];
+
+		foreach ( $all as $item ) {
+			$m_cnt = 0; //matched count
+
+			foreach ( $keywords as $keyword ) {
+				if ( empty( $keyword ) )
+					continue;
+
+				if ( strpos( $item->addr_num, $keyword ) !== false )
+					$m_cnt ++;
+
+				if ( strpos( $item->addr_st, $keyword ) !== false )
+					$m_cnt ++;
+
+				if ( strpos( $item->addr_2, $keyword ) !== false )
+					$m_cnt ++;
+
+				if ( strpos( $item->city, $keyword ) !== false )
+					$m_cnt ++;
+
+				if ( strpos( $item->state, $keyword ) !== false )
+					$m_cnt ++;
+
+				if ( strpos( $item->zip, $keyword ) !== false )
+					$m_cnt ++;
+				
+				if ( strpos( $item->listingID, $keyword ) !== false )
+					$m_cnt ++;
+			}
+
+			$item->m_cnt = $m_cnt;
+
+			if ( $m_cnt )
+				$matches[] = $item;
+		}
+
+		usort( $matches, function($a, $b) {
+			return $a->m_cnt < $b->m_cnt;
+		});
+
+		return $matches;
 	}
 }

@@ -245,3 +245,17 @@ input[type="text"].ssf-input,
 	font-size: 1.5em;
 }
 /* listing nearby section in single property */
+
+
+/* search result css */
+.searched-results .carousel .carousel-control {
+	background: transparent;
+  display: flex;
+  align-items: center;
+  color: #fff;
+}
+
+.searched-results .carousel .carousel-control span {
+	margin: auto;
+}
+/* search result css */
