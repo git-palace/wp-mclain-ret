@@ -178,7 +178,7 @@ function addNewRecordtoLocalDB() {
 	$pictures = [];
 
 	if ( isset( $_POST['sandicor']['pictures'] ) ) {
-		foreach ( $_POST['sandicor']['pictures'] as $key => $picture ) {
+		foreach ( $_POST['sandicor']['pictures'] as $picture ) {
 			array_push( $pictures, ['url' => $picture['url'], 'desc' => $picture['desc'] ]);
 		}
 	}

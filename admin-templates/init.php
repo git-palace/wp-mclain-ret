@@ -35,6 +35,8 @@ add_action( 'admin_menu', function() {
 } );
 
 add_action( 'admin_enqueue_scripts', function() {
+	wp_enqueue_media();
+
 	wp_enqueue_style( 'style', plugins_url( 'assets/css/style.css', __FILE__ ) );
 	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__  ), array( 'jquery' ), '1.0.0', true );	
 } );

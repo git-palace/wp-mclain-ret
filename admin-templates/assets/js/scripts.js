@@ -65,4 +65,50 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 			$(this).remove();
 		});
 	});
+
+	// upload image
+	$('#upload_new_image').click(function() {
+		frame = wp.media({
+			title: 'Add images to property',
+			button: { text: 'Add Images' },
+			align: false,
+			multiple: true
+		});
+
+		frame.on('select', function() {
+			let attachments = frame.state().get('selection').toJSON();
+
+			$(attachments).each(function(idx, attachment) {
+				let id = new Date().getTime().toString(36);
+
+				let html = `
+					<li class="picture d-flex flex-column ` + id + `">
+						<a class="remove-picture d-none text-center"><span class="m-auto">&times;</span></a>
+						<img class="img-fluid m-auto" src="` + attachment.url + `" />
+						<input type="hidden" name="sandicor[pictures][` + id + `][url]" value="` + attachment.url + `">
+						<div class="summary d-flex align-items-center mt-auto">
+							<label class="mr-auto" for="">Description : </label>
+							<input class="ml-auto" type="text" name="sandicor[pictures][` + id + `][desc]" value="` + attachment.alt + `" />
+						</div>
+					</li>
+				`;
+
+				$("#property_pictures").append(html);
+
+				$("#property_pictures li." + id + " a.remove-picture").click(function() {
+					$(this).parent("li.picture").css('-webkit-animation', 'fadeOut 500ms');
+
+					$(this).parent("li.picture").bind('webkitAnimationEnd',function() {
+						$(this).remove();
+					});
+				});
+
+			});
+		});
+
+		frame.open();
+
+		return false;
+	});
+	
 })(jQuery);

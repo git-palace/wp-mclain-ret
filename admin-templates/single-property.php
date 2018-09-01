@@ -69,15 +69,19 @@ $fields = SI()->getExcludedHeaders( 'property', ['Resource', 'Address', 'Photos 
 								</select>
 								
 							<?php elseif ( $key == 'pictures' ): ?>
+								<div style="padding: 6px;">
+									<input type="button" name="upload_new_image" id="upload_new_image" class="button button-primary" value="Upload New Image">
+								</div>
+
 								<ul id="property_pictures" class="d-flex flex-wrap">
 
 									<?php foreach( json_decode( getValidatedValue( $sandicor, $key ) ) as $idx => $picture ) : ?>
 
 										<li class="picture d-flex flex-column">
 											<a class="remove-picture d-none text-center"><span class="m-auto">&times;</span></a>
-											<img class="img-fluid" src="<?php _e( $picture->url ); ?>" />
+											<img class="img-fluid m-auto" src="<?php _e( $picture->url ); ?>" />
 											<input type="hidden" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>][url]" value="<?php _e( $picture->url ); ?>">
-											<div class="summary d-flex align-items-center">
+											<div class="summary d-flex align-items-center mt-auto">
 												<label class="mr-auto" for="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>]">Description : </label>
 												<input class="ml-auto" type="text" name="sandicor[<?php _e( $key ) ?>][<?php _e( $idx ) ?>][desc]" value="<?php _e( $picture->desc ); ?>" />
 											</div>
