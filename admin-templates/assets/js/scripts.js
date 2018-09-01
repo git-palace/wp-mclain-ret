@@ -82,13 +82,13 @@ if (idx != 0) cc[$(obj).text()] = $($(".metadata_details_fields.opened td:nth-ch
 				let id = new Date().getTime().toString(36);
 
 				let html = `
-					<li class="picture d-flex flex-column ` + id + `">
+					<li class="picture d-flex flex-column ` + idx + id + `">
 						<a class="remove-picture d-none text-center"><span class="m-auto">&times;</span></a>
 						<img class="img-fluid m-auto" src="` + attachment.url + `" />
-						<input type="hidden" name="sandicor[pictures][` + id + `][url]" value="` + attachment.url + `">
+						<input type="hidden" name="sandicor[pictures][` + idx + id + `][url]" value="` + attachment.url + `">
 						<div class="summary d-flex align-items-center mt-auto">
 							<label class="mr-auto" for="">Description : </label>
-							<input class="ml-auto" type="text" name="sandicor[pictures][` + id + `][desc]" value="` + attachment.alt + `" />
+							<input class="ml-auto" type="text" name="sandicor[pictures][` + idx + id + `][desc]" value="` + attachment.alt + `" />
 						</div>
 					</li>
 				`;
