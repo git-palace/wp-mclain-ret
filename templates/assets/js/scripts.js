@@ -55,7 +55,7 @@
 
 	$('.searched-results .carousel-control').click(function(e){
     e.preventDefault();
-    let selector = $(this).attr("href");
+    let selector = $(this).attr("data-target");
     $(selector).carousel( $(this).data() );
   });
 })(jQuery);

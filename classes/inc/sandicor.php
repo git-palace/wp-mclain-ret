@@ -146,6 +146,8 @@ class Sandicor {
 					end_datetime varchar(20) NOT NULL DEFAULT '',
 					class varchar(50) NOT NULL DEFAULT '',
 					listing_date varchar(20) NOT NULL DEFAULT '',
+					lat varchar(20) NOT NULL DEFAULT '',
+					lng varchar(20) NOT NULL DEFAULT '',
 					status varchar(20) NOT NULL DEFAULT '',
 					created_by varchar(20) NOT NULL DEFAULT '',
 					created_at varchar(20) NOT NULL DEFAULT '',
@@ -234,7 +236,9 @@ class Sandicor {
 			'status'		=> $property['L_Status'],
 			'system_price'	=> $property['L_SystemPrice'],
 			'created_at'	=> date('Y-m-d H:i:s'),
-			'created_by'	=> $property['created_by']
+			'created_by'	=> $property['created_by'],
+			'lat'	=> '-1',
+			'lng'	=> '-1'
 		);
 
 		switch ( $property['L_Resource'] ) {
@@ -281,6 +285,10 @@ class Sandicor {
 				] );
 				break;
 		}
+
+		$lat_lng = $this->convertAddress2Lat_Lng( implode( ' ', [ $data['addr_num'], $data['addr_st'], $data['addr_2'], $data['city'], $data['state'], $data['zip'] ] ) );
+		$data['lat'] = $lat_lng->lat;
+		$data['lng'] = $lat_lng->lng;
 
 		foreach ( $data as $key => $value ) {
 			if ( is_null( $value ) )
@@ -499,7 +507,7 @@ class Sandicor {
 
 	// get data by key word
 	function getDataByKeyWord( $keywords = []) {
-		$all = $this->getDataFromLocalDB( [] );
+		$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property' ] );
 
 		$matches = [];
 
@@ -543,5 +551,16 @@ class Sandicor {
 		});
 
 		return $matches;
+	}
+
+	// convert address to lat_lng
+	function convertAddress2Lat_Lng( $address ) {
+		$url = sprintf( "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", str_replace( ' ', '+', $address ), $this->google_api_key );
+		$response = json_decode( wp_remote_get( $url )['body'] );
+
+		if( $response->status == "OK" && isset( $response->results[0] ))
+			return $response->results[0]->geometry->location;
+		else
+			return false;		
 	}
 }

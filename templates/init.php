@@ -19,7 +19,9 @@ add_action( 'wp_enqueue_scripts', function() {
 
 	wp_enqueue_style( 'style', plugins_url( 'assets/css/style.css', __FILE__ ) );
 
-	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__ ), array( 'slick' ), '1.8.1', true );
+	wp_enqueue_script( 'scripts', plugins_url( 'assets/js/scripts.js', __FILE__ ), array( 'slick' ), '1.0.0', true );
+
+	wp_enqueue_script( 'global-scripts', plugins_url( 'assets/js/global.js', __FILE__ ), array( 'jquery' ), '1.0.0' );
 });
 
 // add single property page in front end
@@ -42,42 +44,41 @@ add_filter( 'query_vars', function( $query_vars ) {
 } );
 
 add_action( 'template_redirect', function() {
-	if ( !function_exists( 'SI' ) )
-		die;
-
 	$spType = get_query_var('spType');
 
-	get_header();
+	if ($spType) {
+		get_header();
 
-	switch ( $spType ) {
-		case 'single':
-			$listingID = intval( get_query_var( 'listingID' ) );
+		switch ( $spType ) {
+			case 'single':
+				$listingID = intval( get_query_var( 'listingID' ) );
 
-			$property = SI()->getDataBylistingID( $listingID );
+				$property = SI()->getDataBylistingID( $listingID );
 
-			if ( $property)
-				include "single-property.php";
-			else
-				echo "<h1>Invalid Listing ID</h1>";
-			break;
-		
-		case 'search':
-			$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
-
-			$properties = SI()->getDataByKeyWord( $keywords );
+				if ( $property)
+					include "single-property.php";
+				else
+					echo "<h1>Invalid Listing ID</h1>";
+				break;
 			
-			/*echo '<pre>';
-			print_r( $properties ) ;
-			echo '</pre>';*/
+			case 'search':
+				$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
 
-			if ( count( $properties ) )
-				include "search-results.php";
-			else
-				echo "<h1>No Results</h1>";
-			break;
+				$properties = SI()->getDataByKeyWord( $keywords, 'property' );
+				
+				/*echo '<pre>';
+				print_r( $properties ) ;
+				echo '</pre>';*/
+
+				if ( count( $properties ) )
+					include "search-results.php";
+				else
+					echo "<h1>No Results</h1>";
+				break;
+		}
+
+		get_footer();
+
+		die;
 	}
-
-	get_footer();
-
-	die;
 } );

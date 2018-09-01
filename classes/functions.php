@@ -237,7 +237,7 @@ function convertAddress2Lat_Lng( $address, $apiKey ) {
 		return false;
 }
 
-function getListingsNearby( $property, $lat_lng = [], $limit = 3 ) {
+function getListingsNearby( $property, $limit = 3 ) {
 	$results = SI()->getDataFromLocalDB( [
 		'perPage'	=>	'all'
 	], [
@@ -251,10 +251,8 @@ function getListingsNearby( $property, $lat_lng = [], $limit = 3 ) {
 		if ( $property->listingID == $result['listingID'] ) {
 			unset( $results[$key] );
 		} else {
-			$r_lat_lng = convertAddress2Lat_Lng( getValidatedValue( $result, 'address' ), SI()->getGoogleAPIKey() );
-			
-			if ( $r_lat_lng) {
-				$results[$key]['distance'] = sqrt( pow( abs( $lat_lng->lat - $r_lat_lng->lat ), 2 ) + pow( abs( $lat_lng->lng - $r_lat_lng->lng ), 2) );
+			if ( $result) {
+				$results[$key]['distance'] = sqrt( pow( abs( getValidatedValue( $property, 'lat', 0 ) - getValidatedValue( $result, 'lng', 0 ) ), 2 ) + pow( abs( getValidatedValue( $property, 'lng', 0 ) - getValidatedValue( $result, 'lng', 0 ) ), 2) );
 			} else {
 				unset( $results[$key] );				
 			}

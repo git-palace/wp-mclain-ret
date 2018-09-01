@@ -120,8 +120,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-6 property">
-				<?php $loc = convertAddress2Lat_Lng( getValidatedValue( $property, 'address' ), SI()->getGoogleAPIKey() ); ?>
-				<iframe width ="100%" height="350" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?key=<?php _e( SI()->getGoogleAPIKey() ); ?>&q=US+<?php _e( str_replace( ' ', '+', getValidatedValue( $property, 'area') )) ?><?php //_e( $loc ? '&center=' . $loc->lat . ', ' . $loc->lng : '' ); ?>&zoom=13" allowfullscreen>
+				<iframe width ="100%" height="350" frameborder="0" style="border:0" src="https://www.google.com/maps/embed/v1/search?key=<?php _e( SI()->getGoogleAPIKey() ); ?>&q=US+<?php _e( str_replace( ' ', '+', getValidatedValue( $property, 'area') )) ?>&zoom=13" allowfullscreen>
 				</iframe>
 			</div>
 
@@ -139,7 +138,7 @@
 		<h1 class="col-xs-12">Nearby Properties</h1>
 
 		<div class="row">
-			<?php $near_listings = getListingsNearby( $property, $loc ); ?>
+			<?php $near_listings = getListingsNearby( $property ); ?>
 
 
 			<?php foreach ( $near_listings as $s_listing ) : ?>
