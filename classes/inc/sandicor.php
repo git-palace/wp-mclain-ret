@@ -518,25 +518,25 @@ class Sandicor {
 				if ( empty( $keyword ) )
 					continue;
 
-				if ( strpos( $item->addr_num, $keyword ) !== false )
+				if ( strpos( strtolower( $item->addr_num ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 
-				if ( strpos( $item->addr_st, $keyword ) !== false )
+				if ( strpos( strtolower( $item->addr_st ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 
-				if ( strpos( $item->addr_2, $keyword ) !== false )
+				if ( strpos( strtolower( $item->addr_2 ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 
-				if ( strpos( $item->city, $keyword ) !== false )
+				if ( strpos( strtolower( $item->city ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 
-				if ( strpos( $item->state, $keyword ) !== false )
+				if ( strpos( strtolower( $item->state ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 
-				if ( strpos( $item->zip, $keyword ) !== false )
+				if ( strpos( strtolower( $item->zip ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 				
-				if ( strpos( $item->listingID, $keyword ) !== false )
+				if ( strpos( strtolower( $item->listingID ), strtolower( $keyword ) ) !== false )
 					$m_cnt ++;
 			}
 
