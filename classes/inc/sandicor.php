@@ -505,8 +505,8 @@ class Sandicor {
 		return $this->google_api_key;
 	}
 
-	// get data by key word
-	function getDataByKeyWord( $keywords = []) {
+	// get properties by key word
+	function getPropertiesByKeyWord( $keywords = []) {
 		$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property' ] );
 
 		$matches = [];
@@ -562,5 +562,22 @@ class Sandicor {
 			return $response->results[0]->geometry->location;
 		else
 			return false;		
+	}
+
+	// get properties by city
+	function getPropertiesByCity( $city = false ) {
+		if ( !$city || empty( $city ) )
+			return array();
+		
+		
+		$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property' ] );
+		$matches = [];
+
+		foreach ( $all as $item ) {
+			if ( strpos( strtolower( $item->city ), strtolower( $city ) ) !== false )
+				array_push( $matches, $item );
+		}
+
+		return $matches;
 	}
 }
