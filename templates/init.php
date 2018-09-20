@@ -65,15 +65,37 @@ add_action( 'template_redirect', function() {
 				break;
 			
 			case 'search':
-				$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
+				$ip = $_SERVER['REMOTE_ADDR'];
 
-				$properties = SI()->getPropertiesByKeyWord( $keywords, 'property' );
+				$s_criteria_arr = get_transient( $ip . '_searched_criteria' );
 
-				if ( count( $properties ) )
-					include "search-results.php";
-				else
-					echo "<h1>No Results</h1>";
-				break;
+				if ( count( $s_criteria_arr ) >= 3 && !is_user_logged_in()) {
+					_e( '<div class="container sandicor-signup">' );
+						_e( "<h1 class='text-center' style='margin: 5em 0 2em'>Please register to search more.</h1>" );
+
+						_e( '<div class="col-md-6 col-md-offset-3" style="margin-bottom: 3em;">' );
+							_e( do_shortcode('[gravityform id="8" title="false" description="false" ajax="true"]') );
+						_e( '</div>' );
+					_e( '</div>' );
+				} else {
+
+					if( !is_array( $s_criteria_arr ) || empty( $s_criteria_arr ) )
+						$s_criteria_arr = array();
+
+					$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
+
+					$properties = SI()->getPropertiesByKeyWord( $keywords, 'property' );
+
+					array_push( $s_criteria_arr, $keywords );
+
+					set_transient( $ip . '_searched_criteria', $s_criteria_arr, 86400 );
+
+					if ( count( $properties ) )
+						include "search-results.php";
+					else
+						echo "<h1 class='text-center' style='margin: 5em 0;'>No Results</h1>";
+					break;
+				}
 		}
 
 		get_footer();

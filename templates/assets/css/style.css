@@ -3,11 +3,15 @@
 	margin: auto;
 }
 
+input[type="text"].ssf-input {
+	width: 500px;
+}
+
 input[type="text"].ssf-input,
 .ssf-btn {
 	height: 50px;
-  padding: 8px 25px;
-  border-radius: 8px;
+	padding: 8px 25px;
+	border-radius: 8px;
 }
 
 .ssf-btn {
@@ -22,6 +26,17 @@ input[type="text"].ssf-input,
 .ssf-btn:hover {
 	color: #fff;
 	background-color: #101f6d;
+}
+
+@media (max-width: 767px) {
+	input[type="text"].ssf-input {
+		width: 320px;
+	}
+
+	.ssf-btn {
+		padding-left: 20px;
+		padding-right: 20px;
+	}
 }
 
 /* header in single property */
@@ -57,6 +72,7 @@ input[type="text"].ssf-input,
 	font-size: 1em;
 	color: #fff;
 }
+
 /* header in single property */
 
 /* slide in single property */
@@ -108,21 +124,21 @@ input[type="text"].ssf-input,
 	background-color: #fff;
 }
 
-.listing-details .table > tbody > tr:first-child > td {
+.listing-details .table>tbody>tr:first-child>td {
 	border-top-width: 0;
 }
 
-.listing-details .table > tbody > tr > td {
+.listing-details .table>tbody>tr>td {
 	padding: 1.5rem 0;
 }
 
-.listing-details .table > tbody > tr > td:nth-child(2) {
+.listing-details .table>tbody>tr>td:nth-child(2) {
 	text-align: right;
 }
 
 .listing-details .table-container {
 	background: #fff;
-	box-shadow: 0 4px 20px 0 rgba(48,38,35,.26);
+	box-shadow: 0 4px 20px 0 rgba(48, 38, 35, .26);
 	padding: 6rem 3rem 3rem;
 	position: relative;
 	margin: 35px 0 30px;
@@ -136,7 +152,7 @@ input[type="text"].ssf-input,
 	height: 70px;
 	width: 70px;
 	background-color: #182a83;
-	box-shadow: 0 4px 20px 0 rgba(48,38,35,.26);
+	box-shadow: 0 4px 20px 0 rgba(48, 38, 35, .26);
 	color: #fff;
 	border-radius: 50%;
 	display: flex;
@@ -146,6 +162,7 @@ input[type="text"].ssf-input,
 .listing-details .table-container .house-icon img {
 	margin: auto;
 }
+
 /* listing detail section in single property */
 
 /* listing map section in single property */
@@ -172,6 +189,7 @@ input[type="text"].ssf-input,
 .listing-map .visit:hover {
 	background-color: #132169;
 }
+
 /* listing map section in single property */
 
 /* listing nearby section in single property */
@@ -200,8 +218,8 @@ input[type="text"].ssf-input,
 }
 
 .listing-nearby .thumbnail .no-image {
-    margin: auto;
-    font-size: 2em;
+	margin: auto;
+	font-size: 2em;
 }
 
 .listing-nearby a:hover .thumbnail:after {
@@ -244,6 +262,7 @@ input[type="text"].ssf-input,
 	font-weight: lighter;
 	font-size: 1.5em;
 }
+
 /* listing nearby section in single property */
 
 
@@ -260,10 +279,10 @@ input[type="text"].ssf-input,
 
 .searched-results .carousel .carousel-control {
 	background: transparent;
-  display: flex;
-  align-items: center;
-  color: #fff;
-  cursor: pointer;
+	display: flex;
+	align-items: center;
+	color: #fff;
+	cursor: pointer;
 }
 
 .searched-results .carousel .carousel-control span {
@@ -288,24 +307,24 @@ input[type="text"].ssf-input,
 }
 
 .searched-results .no-image::after {
-  content: 'No Image Available';
-  width: 100%;
-  text-align: center;
-  font-size: 1.75em;
-  color: #fff;
-  z-index: 1;
+	content: 'No Image Available';
+	width: 100%;
+	text-align: center;
+	font-size: 1.75em;
+	color: #fff;
+	z-index: 1;
 }
 
 .searched-results .summary {
-  position: absolute;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, .5);
-  left: 15px;
-  right: 15px;
-  text-align: center;
-  padding: 25px 0px;
-  font-weight: bold;
-  text-transform: uppercase;
+	position: absolute;
+	bottom: 0;
+	background-color: rgba(0, 0, 0, .5);
+	left: 15px;
+	right: 15px;
+	text-align: center;
+	padding: 25px 0px;
+	font-weight: bold;
+	text-transform: uppercase;
 }
 
 .searched-results .summary a {
@@ -317,8 +336,8 @@ input[type="text"].ssf-input,
 }
 
 .h-850px {
-  height: 850px;
-  overflow: auto;
+	height: 850px;
+	overflow: auto;
 }
 
 .search-result-map-container {
@@ -328,4 +347,8 @@ input[type="text"].ssf-input,
 #search-result-map {
 	height: 100%;
 }
+
 /* search result css */
+.sandicor-signup .gform_confirmation_message {
+	text-align: center
+}

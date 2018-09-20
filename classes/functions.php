@@ -17,6 +17,10 @@ if ( isset( $_GET['pageIdx'] ) &&	!empty( $_GET['pageIdx'] ) ) {
 	$limits['pageIdx'] = intval( $_GET['pageIdx'] );
 }
 //==============================================================================================//
+add_role(
+    'sandicor_lead',
+    __( 'Sandicor Lead' )
+);
 
 add_action( 'rest_api_init', function () {
 	register_rest_route( 

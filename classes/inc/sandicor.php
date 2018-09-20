@@ -287,22 +287,21 @@ class Sandicor {
 		}
 
 		$lat_lng = $this->convertAddress2Lat_Lng( implode( ' ', [ $data['addr_num'], $data['addr_st'], $data['addr_2'], $data['city'], $data['state'], $data['zip'] ] ) );
-		$data['lat'] = $lat_lng->lat;
-		$data['lng'] = $lat_lng->lng;
+			
+		if ( $lat_lng ) {
+			$data['lat'] = $lat_lng->lat;
+			$data['lng'] = $lat_lng->lng;
+		}
 
 		foreach ( $data as $key => $value ) {
 			if ( is_null( $value ) )
 				$data[$key] = '';
 		}
 
-		$sql = sprintf( "SELECT * FROM `%s` WHERE `listingID` = '%s'", $table_name, $property['L_ListingID'] );
-		$old_properties = $wpdb->get_results( $sql, ARRAY_A );
+		$wp_success = $wpdb->update( $table_name, $data, array( 'listingID' => $property['L_ListingID'] ) );
 
-		if ( count( $old_properties ) ){
-			$wp_success = $wpdb->update( $table_name, $data, array( 'listingID' => $property['L_ListingID'] ) );
-		}	else {
+		if (!$wp_success)
 			$wp_success = $wpdb->insert( $table_name, $data );
-		}
 	}
 
 	// get table headers
@@ -556,12 +555,22 @@ class Sandicor {
 	// convert address to lat_lng
 	function convertAddress2Lat_Lng( $address ) {
 		$url = sprintf( "https://maps.googleapis.com/maps/api/geocode/json?address=%s&key=%s", str_replace( ' ', '+', $address ), $this->google_api_key );
-		$response = json_decode( wp_remote_get( $url )['body'] );
+		
+		$response = wp_remote_get( $url );
 
-		if( $response->status == "OK" && isset( $response->results[0] ))
-			return $response->results[0]->geometry->location;
-		else
-			return false;		
+		if ( !is_wp_error( $response ) ) {
+			$response = json_decode( $response['body'] );
+
+			if( $response->status == "OK" && isset( $response->results[0] ))
+				return $response->results[0]->geometry->location;
+			else {
+				error_log( print_r( $response, true ) );
+				return false;
+			}
+		} else {
+			error_log( print_r( $response, true ) );
+			return false;
+		}
 	}
 
 	// get properties by city

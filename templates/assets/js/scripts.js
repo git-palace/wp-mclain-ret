@@ -47,6 +47,8 @@
 	$('form.simple-search-form').submit(function(e) {
 		e.preventDefault();
 
+		$.post()
+
 		let keyword = $('form.simple-search-form input').val();
 
 		if (keyword && keyword.length)
