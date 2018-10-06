@@ -1,3 +1,20 @@
+<h1 class="sr-title text-center text-uppercase">
+	Property Search Results
+	<?php if ( is_user_logged_in() ): ?>
+		<?php
+			$saved = false;
+
+			$keyword = get_query_var('keyword');
+
+			$sandicor_criterias = get_user_meta( get_current_user_id(), 'sandicor_criterias', true );
+
+			if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) )
+				$saved = in_array( $keyword, $sandicor_criterias );
+		?>
+		<a href="javascript:void(0)" class="btn <?php echo esc_attr( $saved ? 'saved' : '') ?>" keyword="<?php echo esc_attr( $keyword ); ?>"><i class="fa fa-star" aria-hidden="true"></i> Save This Search</a>
+	<?php endif; ?>
+</h1>
+
 <section class="filter-options"></section>
 
 <section class="searched-results">

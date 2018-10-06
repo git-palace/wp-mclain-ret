@@ -267,6 +267,40 @@ input[type="text"].ssf-input,
 
 
 /* search result css */
+h1.sr-title {
+	margin: 40px 0px;
+	position: relative;
+	letter-spacing: 2px;
+}
+
+h1.sr-title::after {
+	position: absolute;
+	content: ' ';
+	border: 1px solid #221c8a;
+	width: 100px;
+	bottom: -15px;
+	left: calc(50% - 50px);
+}
+
+h1.sr-title a {
+	font-size: 12px;
+	letter-spacing: normal;
+	background-color: #737373;
+	border: none;
+	color: #fff;
+	position: absolute;
+	margin-left: 100px;
+	bottom: 0;
+}
+
+h1.sr-title a.saved {
+	color: #333;
+}
+
+h1.sr-title a i {
+	margin-right: 4px;
+}
+
 .searched-results,
 .searched-results .matched-query {
 	margin: 15px 0px;
@@ -351,4 +385,31 @@ input[type="text"].ssf-input,
 /* search result css */
 .sandicor-signup .gform_confirmation_message {
 	text-align: center
+}
+
+.sandicor-dashboard {
+	padding-top: 100px;
+	padding-bottom: 100px;
+}
+
+.sandicor-dashboard .nav-pills li a {
+	border-radius: 0;
+}
+
+.sandicor-dashboard .nav-pills li.active a {
+	background-color: #221c8a;
+}
+
+.sandicor-dashboard .form-horizontal {
+    width: 400px;
+    margin: auto;
+}
+
+.sandicor-dashboard .form-horizontal .control-label {
+	text-align: right;
+	margin-left: 0;
+}
+
+.sandicor-dashboard .form-horizontal button {
+    border-color: #221c8a!important;
 }
