@@ -298,10 +298,53 @@ class Sandicor {
 				$data[$key] = '';
 		}
 
-		$wp_success = $wpdb->update( $table_name, $data, array( 'listingID' => $property['L_ListingID'] ) );
-
-		if (!$wp_success)
+		if ( !$this->isExistingListing( $property['L_ListingID'] ) ) {
 			$wp_success = $wpdb->insert( $table_name, $data );
+
+			$users = get_users( array( 'role' => 'sandicor_lead' ) );
+
+			foreach ( $users as $key => $user ) {
+
+				$html = 'There are new properties matched with your keywords.';
+				$is_found = false;
+
+				$s_keywords = get_user_meta( $user->ID, 'sandicor_criterias', true );
+
+				foreach ( $s_keywords as $item ) {
+			
+					$keywords = explode( ' ', str_replace( ',', ' ', $item['keyword'] ) );
+					$search_results = SI()->getPropertiesByKeyWord( $keywords, $property['L_ListingID'] );
+					
+					foreach ( $search_results as $result ) {
+						if ( !in_array( $result->listingID, $item['properties'] ) ) {
+							$is_found = true;
+
+							$html .= '<p><a target="_blank" href="' . esc_attr( home_url( '/single-property/' . $result->listingID ) ) . '">' . getValidatedValue( $result, 'address' ) . ', ' . getValidatedValue( $result, 'city' ) . ' (Matched keyword is "' . $item['keyword'] . '")</a></p>';
+						}
+					}
+				}
+
+				if ( $is_found ) {
+					wp_mail(
+						$user->user_email,
+						'New properties',
+						$html,
+						array( 'Content-Type: text/html; charset=UTF-8' )
+					);
+				}
+			}
+		} else {
+			$wpdb->update( $table_name, $data, array( 'listingID' => $property['L_ListingID'] ) );
+		}
+	}
+
+	// if existing in current db
+
+	function isExistingListing( $listingID = false ) {
+		if ( !$listingID )
+			return;
+
+		return count( $this->getDataFromLocalDB( ['perPage' => 10, 'pageIdx' => 1], [ 'listingID' => $listingID ] ) ) ? true : false;
 	}
 
 	// get table headers
@@ -505,8 +548,13 @@ class Sandicor {
 	}
 
 	// get properties by key word
-	function getPropertiesByKeyWord( $keywords = []) {
-		$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property' ] );
+	function getPropertiesByKeyWord( $keywords = [], $listingID = false ) {
+
+		if ( !$listingID ) {
+			$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property' ] );
+		} else {
+			$all = $this->getDataFromLocalDB( [], [ 'resource' => 'property', 'listingID' => $listingID ] );
+		}
 
 		$matches = [];
 

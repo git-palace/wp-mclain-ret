@@ -87,7 +87,7 @@ add_action( 'template_redirect', function() {
 
 					$keywords = explode( ' ', str_replace( ',', ' ', get_query_var('keyword') ) );
 
-					$properties = SI()->getPropertiesByKeyWord( $keywords, 'property' );
+					$properties = SI()->getPropertiesByKeyWord( $keywords );
 
 					if ( !is_user_logged_in() ) {
 						array_push( $s_criteria_arr, $keywords );
@@ -149,13 +149,26 @@ add_action( 'wp_ajax_save_search_criteria', function() {
 
 		if ( in_array( $criteria, $sandicor_criterias ) ) {
 			foreach ( $sandicor_criterias as $key => $s_criteria ) {
-				if ( $s_criteria == $criteria ) {
+				if ( $s_criteria['keyword'] == $criteria ) {
 					unset( $sandicor_criterias[$key] );
 					break;
 				}
 			}
 		} else {
-			array_push( $sandicor_criterias, $criteria );
+
+			$keywords = explode( ' ', str_replace( ',', ' ', $criteria ) );
+			$properties = SI()->getPropertiesByKeyWord( $keywords );
+
+			$m_properties = array();
+
+			foreach ( $properties as $key => $property ) {
+				array_push( $m_properties, $property->listingID );
+			}
+			
+			array_push( $sandicor_criterias, array( 
+				'keyword' => $criteria,
+				'properties' => $m_properties
+			) );
 		}
 
 		update_user_meta( get_current_user_id(), 'sandicor_criterias', $sandicor_criterias );
@@ -170,7 +183,7 @@ add_action( 'wp_ajax_delete_key_word', function() {
 		$sandicor_criterias = get_user_meta( get_current_user_id(), 'sandicor_criterias', true );
 
 		foreach ( $sandicor_criterias as $key => $s_criteria ) {
-			if ( $s_criteria == $_POST['criteria'] ) {
+			if ( $s_criteria['keyword'] == $_POST['criteria'] ) {
 				unset( $sandicor_criterias[$key] );
 				break;
 			}
@@ -185,7 +198,7 @@ add_action( 'wp_ajax_delete_key_word', function() {
 		if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) ) : $idx = 0; $html = '';
 		
 			foreach ( $sandicor_criterias as $criteria ):
-				$html .= '<tr><td><b>' . ( $idx +1 ) . '</b></td><td>' . $criteria . '</td><td><a class="delete" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria ) . '">Delete</a> | <a class="" href="/search-results/' . esc_attr( $criteria ) . '" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria ) . '">Visit</a></td></tr>';
+				$html .= '<tr><td><b>' . ( $idx +1 ) . '</b></td><td>' . $criteria['keyword'] . '</td><td><a class="delete" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Delete</a> | <a class="" href="/search-results/' . esc_attr( $criteria['keyword'] ) . '" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Visit</a></td></tr>';
 			endforeach;
 			
 			echo json_encode( array( 'failed' => false, 'html' => $html ) );
@@ -196,6 +209,7 @@ add_action( 'wp_ajax_delete_key_word', function() {
 		wp_die();
 	}
 } );
+
 
 add_action( 'wp_ajax_change_password', function() {
 	$user = wp_get_current_user();

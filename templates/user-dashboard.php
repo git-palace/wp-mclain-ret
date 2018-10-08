@@ -24,10 +24,10 @@
 							<?php foreach ( $sandicor_criterias as $criteria ): ?>
 								<tr>
 									<td><b><?php _e( $idx = $idx +1 ) ?></b></td>
-									<td><?php _e( $criteria ) ?></td>
+									<td><?php _e( $criteria['keyword'] ) ?></td>
 									<td>
-										<a class="delete" href="javascript:void(0)" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria ); ?>">Delete</a> |
-										<a class="" href="/search-results/<?php echo esc_attr( $criteria ); ?>" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria ); ?>">Visit</a>
+										<a class="delete" href="javascript:void(0)" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria['keyword'] ); ?>">Delete</a> |
+										<a class="" href="/search-results/<?php echo esc_attr( $criteria['keyword'] ); ?>" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria['keyword'] ); ?>">Visit</a>
 									</td>
 								</tr>
 							<?php endforeach; ?>
