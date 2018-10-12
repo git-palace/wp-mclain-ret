@@ -235,7 +235,7 @@ add_action( 'wp_ajax_change_password', function() {
 } );
 
 add_action( 'wp_ajax_single_property_details', 'single_property_details' );
-add_action( 'wp_ajax_no_priv_single_property_details', 'single_property_details' );
+add_action( 'wp_ajax_nopriv_single_property_details', 'single_property_details' );
 function single_property_details() {
 	if ( isset( $_POST['listingID'] ) ) {
 		$property = SI()->getDataBylistingID( $_POST['listingID'] );
@@ -243,6 +243,6 @@ function single_property_details() {
 		if ( $property)
 			include "single-property.php";		
 	}
-	
+
 	wp_die();
 }
