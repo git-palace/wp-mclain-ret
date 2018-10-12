@@ -178,10 +178,10 @@ class Sandicor {
 				'resource' => 'Property',
 				'classes' => $this->getResourceClasses( "property" )
 			),
-			'open_house' => array(
+			/*'open_house' => array(
 				'resource' => 'OpenHouse',
 				'classes' => $this->getResourceClasses( "open_house" )
-			)
+			)*/
 		);
 
 		foreach ( $filters as $resource => $filter ) {
