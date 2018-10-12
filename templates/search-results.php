@@ -8,8 +8,15 @@
 
 			$sandicor_criterias = get_user_meta( get_current_user_id(), 'sandicor_criterias', true );
 
-			if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) )
-				$saved = in_array( $keyword, $sandicor_criterias );
+			if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) ) {
+				foreach ( $sandicor_criterias as $criteria) {
+					$saved = strtolower( $keyword ) == strtolower( $criteria['keyword'] );
+
+					if ( $saved )
+						break;
+				}
+				
+			}
 		?>
 		<a href="javascript:void(0)" class="btn <?php echo esc_attr( $saved ? 'saved' : '') ?>" keyword="<?php echo esc_attr( $keyword ); ?>"><i class="fa fa-star" aria-hidden="true"></i> Save This Search</a>
 	<?php endif; ?>
