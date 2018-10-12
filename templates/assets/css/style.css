@@ -363,6 +363,7 @@ h1.sr-title a i {
 
 .searched-results .summary a {
 	color: #fff;
+	display: block;
 }
 
 .searched-results .summary p {
@@ -412,4 +413,17 @@ h1.sr-title a i {
 
 .sandicor-dashboard .form-horizontal button {
     border-color: #221c8a!important;
+}
+
+#property-detail .modal-dialog {
+	width: 85vw;
+	padding: 
+}
+
+#property-detail .modal-dialog .modal-title {
+	margin: 15px;
+}
+
+#property-detail .modal-dialog .modal-body {
+	padding: 15px 50px;
 }

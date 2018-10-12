@@ -64,14 +64,12 @@
 							<?php endif;?>
 
 							<div class="summary">
-								<p><a target="_blank" href="/single-property/<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>"><?php _e( getValidatedValue( $property, 'address' ) ); ?>, <?php _e( getValidatedValue( $property, 'city' ) ); ?></a></p>
-								<p>
-									<a target="_blank" href="/single-property/<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>">
-										<?php _e( getValidatedValue( $property, 'beds_num', 'No' ) ); ?> Bed(s)&nbsp;∙&nbsp;
-										<?php _e( getValidatedValue( $property, 'baths_num', 'No' ) ); ?> Bath(s)
-									</a>
-								</p>
-								<p><a target="_blank" href="/single-property/<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>"><?php _e( '$' . number_format( floatval( getValidatedValue( $property, 'list_price', 0 ) ) ) ); ?></a></p>
+								<p><a class="address" target="_blank" href="javascript: void(0);" listing-id="<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>"><?php _e( getValidatedValue( $property, 'address' ) ); ?>, <?php _e( getValidatedValue( $property, 'city' ) ); ?></a></p>
+								<p><a target="_blank" href="javascript: void(0);" listing-id="<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>">
+									<?php _e( getValidatedValue( $property, 'beds_num', 'No' ) ); ?> Bed(s)&nbsp;∙&nbsp;
+									<?php _e( getValidatedValue( $property, 'baths_num', 'No' ) ); ?> Bath(s)
+								</a></p>
+								<p><a target="_blank" href="javascript: void(0);" listing-id="<?php _e( getValidatedValue( $property, 'listingID' ) ); ?>"><?php _e( '$' . number_format( floatval( getValidatedValue( $property, 'list_price', 0 ) ) ) ); ?></a></p>
 							</div>
 						</div>
 					<?php endforeach; ?>
@@ -106,3 +104,21 @@
 
 	var marker_list = <?php _e( json_encode( $marker_list ) ); ?>;
 </script>
+
+<!-- Modal -->
+<div class="modal fade" id="property-detail" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Modal title</h4>
+			</div>
+
+			<div class="modal-body"></div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
