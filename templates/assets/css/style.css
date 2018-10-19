@@ -427,3 +427,13 @@ h1.sr-title a i {
 #property-detail .modal-dialog .modal-body {
 	padding: 15px 50px;
 }
+
+/* sandicor login form */
+form.sandicor-login-form {
+	margin: 150px 0px;
+}
+
+form.sandicor-login-form label.control-label {
+    margin-left: 0;
+    text-align: right;
+}

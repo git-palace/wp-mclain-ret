@@ -33,7 +33,8 @@ add_filter( 'generate_rewrite_rules', function ( $wp_rewrite ) {
 		[
 			'single-property/(\d+)/?$' => 'index.php?spType=single&listingID=$matches[1]',
 			'search-results/([a-zA-Z0-9 ,_]+)/?$' => 'index.php?spType=search&keyword=$matches[1]',
-			'sandicor-dashboard' => 'index.php?spType=dashboard'
+			'sandicor-dashboard' => 'index.php?spType=dashboard',
+			'sandicor-login' => 'index.php?spType=login'
 		],
 		$wp_rewrite->rules
 	);
@@ -53,10 +54,11 @@ add_action( 'template_redirect', function() {
 	$spType = get_query_var('spType');
 
 	if ($spType) {
-		get_header();
 
 		switch ( $spType ) {
 			case 'single':
+				get_header();
+
 				$listingID = intval( get_query_var( 'listingID' ) );
 
 				$property = SI()->getDataBylistingID( $listingID );
@@ -68,6 +70,8 @@ add_action( 'template_redirect', function() {
 				break;
 			
 			case 'search':
+				get_header();
+				
 				$ip = $_SERVER['REMOTE_ADDR'];
 
 				$s_criteria_arr = get_transient( $ip . '_searched_criteria' );
@@ -104,14 +108,28 @@ add_action( 'template_redirect', function() {
 				break;
 
 			case 'dashboard':
-				if ( is_user_logged_in() )
+				if ( is_user_logged_in() ){
+					get_header();
+				
 					include 'user-dashboard.php';
+				}
 				else {
-					wp_redirect( home_url() );
-					wp_die();
+					wp_redirect( home_url('/sandicor-login') );
+					exit;
 				}
 
 
+				break;
+
+			case 'login':
+				if ( !is_user_logged_in() ) {
+					get_header();
+				
+					include 'user-login.php';
+				} else {
+					wp_redirect( home_url( '/sandicor-dashboard' ) );
+					exit;
+				}
 				break;
 		}
 
@@ -244,5 +262,19 @@ function single_property_details() {
 			include "single-property.php";		
 	}
 
+	wp_die();
+}
+
+add_action( 'wp_ajax_sandicor_login', 'sandicor_login' );
+add_action( 'wp_ajax_nopriv_sandicor_login', 'sandicor_login' );
+function sandicor_login() {
+	$user = wp_signon( array( 'user_login' => $_POST['email'], 'user_password' => $_POST['password'] ) );
+
+	if ( is_wp_error( $user ) ) {
+		echo json_encode( array( 'failed' => true, 'msg' => $user->get_error_message() ) );
+	} else {
+		echo json_encode( array( 'failed' => false ) );
+	}
+	
 	wp_die();
 }

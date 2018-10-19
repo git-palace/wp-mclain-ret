@@ -155,4 +155,27 @@
         }
         e.preventDefault();
     });
+
+    $("form.sandicor-login-form").submit(function(e) {
+        let email = $("form.sandicor-login-form #email").val();
+        let password = $("form.sandicor-login-form #password").val()
+
+        $.post(
+            ajax_obj.url, {
+                "action": "sandicor_login",
+                "email": email,
+                "password": password
+            }, function(data) {
+                let res = JSON.parse(data);
+
+                if (res.failed) {
+                    alert(res.msg);
+                } else {
+                    window.location.reload();
+                }
+            }
+        );
+
+        e.preventDefault();
+    });
 })(jQuery);
