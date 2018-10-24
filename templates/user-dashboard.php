@@ -27,6 +27,7 @@
 									<td><?php _e( $criteria['keyword'] ) ?></td>
 									<td>
 										<a class="delete" href="javascript:void(0)" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria['keyword'] ); ?>">Delete</a> |
+										<a class="edit" href="javascript:void(0)" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria['keyword'] ); ?>">Edit</a> |
 										<a class="" href="/search-results/<?php echo esc_attr( $criteria['keyword'] ); ?>" k-index="<?php echo esc_attr( $idx ) ?>" keyword="<?php echo esc_attr( $criteria['keyword'] ); ?>">Visit</a>
 									</td>
 								</tr>
@@ -59,6 +60,32 @@
 				    </div>
 				  </div>
 				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="edit-keyword" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				<h4 class="modal-title">Edit Keyword</h4>
+			</div>
+
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-xs-offset-3 col-xs-6">
+						<input type="hidden" id="keyIndex"/>
+						<input type="hidden" id="keyword"/>
+						<input type="text" class="form-control" id="newKeyword" placeholder="New Keyword"/>
+					</div>
+				</div>
+			</div>
+			
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default update" data-dismiss="modal">Update</button>
 			</div>
 		</div>
 	</div>

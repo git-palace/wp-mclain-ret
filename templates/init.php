@@ -213,10 +213,14 @@ add_action( 'wp_ajax_delete_key_word', function() {
 		?>
 
 		<?php 
-		if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) ) : $idx = 0; $html = '';
+		if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) ) :
+			$idx = 0; 
+			$html = '';
 		
 			foreach ( $sandicor_criterias as $criteria ):
-				$html .= '<tr><td><b>' . ( $idx +1 ) . '</b></td><td>' . $criteria['keyword'] . '</td><td><a class="delete" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Delete</a> | <a class="" href="/search-results/' . esc_attr( $criteria['keyword'] ) . '" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Visit</a></td></tr>';
+				$html .= '<tr><td><b>' . ( $idx +1 ) . '</b></td><td>' . $criteria['keyword'] . '</td><td><a class="delete" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Delete</a> | <a class="edit" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Edit</a> | <a class="" href="/search-results/' . esc_attr( $criteria['keyword'] ) . '" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Visit</a></td></tr>';
+				
+				$idx ++;
 			endforeach;
 			
 			echo json_encode( array( 'failed' => false, 'html' => $html ) );
@@ -228,6 +232,56 @@ add_action( 'wp_ajax_delete_key_word', function() {
 	}
 } );
 
+
+// update keyword from user dashboard
+add_action( 'wp_ajax_update_key_word', function() {
+	if ( isset( $_POST['o_criteria'] ) && !empty( $_POST['o_criteria'] ) && isset( $_POST['n_criteria'] ) && !empty( $_POST['n_criteria'] ) ) {
+		$sandicor_criterias = get_user_meta( get_current_user_id(), 'sandicor_criterias', true );
+
+		foreach ( $sandicor_criterias as $key => $s_criteria ) {
+			if ( $s_criteria['keyword'] == $_POST['o_criteria'] ) {
+				$keywords = explode( ' ', str_replace( ',', ' ', $_POST['n_criteria'] ) );
+				$properties = SI()->getPropertiesByKeyWord( $keywords );
+
+				$m_properties = array();
+
+				foreach ( $properties as $key => $property ) {
+					array_push( $m_properties, $property->listingID );
+				}
+				
+				$sandicor_criterias[$key] = array( 
+					'keyword' => $_POST['n_criteria'],
+					'properties' => $m_properties
+				);
+				
+				break;
+			}
+		}
+
+		update_user_meta( get_current_user_id(), 'sandicor_criterias', $sandicor_criterias );
+		$sandicor_criterias = get_user_meta( get_current_user_id(), 'sandicor_criterias', true );
+
+		?>
+
+		<?php 
+		if ( isset( $sandicor_criterias ) && !empty( $sandicor_criterias ) ) : 
+			$idx = 0; 
+			$html = '';
+		
+			foreach ( $sandicor_criterias as $criteria ):
+				$html .= '<tr><td><b>' . ( $idx + 1 ) . '</b></td><td>' . $criteria['keyword'] . '</td><td><a class="delete" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Delete</a> | <a class="edit" href="javascript:void(0)" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Edit</a> | <a class="" href="/search-results/' . esc_attr( $criteria['keyword'] ) . '" k-index="' . esc_attr( $idx ) . '" keyword="' . esc_attr( $criteria['keyword'] ) . '">Visit</a></td></tr>';
+
+				$idx ++;
+			endforeach;
+			
+			echo json_encode( array( 'failed' => false, 'html' => $html ) );
+		else:
+			echo json_encode( array( 'failed' => true ) );
+		endif;
+
+		wp_die();
+	}
+} );
 
 add_action( 'wp_ajax_change_password', function() {
 	$user = wp_get_current_user();

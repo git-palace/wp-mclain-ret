@@ -70,18 +70,19 @@
         let address = "<a target='_blank' href='/single-property/" + listingID + "'>" + $(this).parents(".summary").find(".address").text() + "</a>";
 
         $.post(
-        	ajax_obj.url, {
-        		"action": "single_property_details",
-        		"listingID": listingID
-        	}, function(data) {
-        		$("#property-detail h4.modal-title").html(address);
-        		$("#property-detail .modal-body").html(data);
+            ajax_obj.url, {
+                "action": "single_property_details",
+                "listingID": listingID
+            },
+            function(data) {
+                $("#property-detail h4.modal-title").html(address);
+                $("#property-detail .modal-body").html(data);
 
-        		single_property_slick_slider_events();
-        		$(".slick-slide").click();
+                single_property_slick_slider_events();
+                $(".slick-slide").click();
 
-        		$("#property-detail").modal();
-        	}
+                $("#property-detail").modal();
+            }
         );
     });
 
@@ -103,6 +104,7 @@
     });
 
     $("table.keywords td a.delete").click(function(e) { keywordDelete(e) });
+    $("table.keywords td a.edit").click(function(e) { keywordUpdate(e) });
 
     var keywordDelete = function(e) {
         let index = $(e.target).attr("k-index");
@@ -124,9 +126,50 @@
                     $("table.keywords tbody").html(res.html);
 
                 $("table.keywords td a.delete").click(function(e) { keywordDelete(e) });
+                $("table.keywords td a.edit").click(function(e) { keywordUpdate(e) });
             }
         )
     }
+
+    var keywordUpdate = function(e) {
+        let index = $(e.target).attr("k-index");
+        let criteria = $(e.target).attr("keyword");
+
+        $("#edit-keyword #keyIndex").val(index);
+        $("#edit-keyword #keyword").val(criteria);
+        $("#edit-keyword #newKeyword").val(criteria);
+
+        $("#edit-keyword").modal();
+    }
+
+    $("#edit-keyword button.update").click(function(e) {
+        let o_criteria = $("#edit-keyword #keyword").val();
+        let n_criteria = $("#edit-keyword #newKeyword").val();
+
+        if (o_criteria != n_criteria) {
+            $.post(
+                ajax_obj.url, {
+                    "action": "update_key_word",
+                    "o_criteria": o_criteria,
+                    "n_criteria": n_criteria
+                },
+                function(data) {
+                    console.log(data);
+                    let res = JSON.parse(data);
+
+                    if (res.failed)
+                        $("table.keywords tbody").html("")
+                    else
+                        $("table.keywords tbody").html(res.html);
+
+                    $("table.keywords td a.delete").click(function(e) { keywordDelete(e) });
+                    $("table.keywords td a.edit").click(function(e) { keywordUpdate(e) });
+                }
+            )
+        }
+
+        e.preventDefault();
+    });
 
     $("#change-password form").submit(function(e) {
 
@@ -165,7 +208,8 @@
                 "action": "sandicor_login",
                 "email": email,
                 "password": password
-            }, function(data) {
+            },
+            function(data) {
                 let res = JSON.parse(data);
 
                 if (res.failed) {
